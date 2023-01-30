@@ -7,8 +7,5 @@ namespace ProjectDiorama
         public abstract Vector2Int DirectionsPerRotation(RotationDirection dir);
 
         public abstract Vector3 ObjectOffset(Vector2 size, float height, RotationDirection dir, Vector2Int directions, int cellSize);
-
-        public abstract Vector3 SpritePositionToCursor(Vector2 size, FootprintOrientation footPrintOrientation,
-            Vector2Int directions, int cellSize);
     }
 }

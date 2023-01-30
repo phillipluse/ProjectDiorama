@@ -60,11 +60,18 @@ namespace ProjectDiorama
 
             return newSize;
         }
+        
+        bool IsObjectSingleMultiRectangle()
+        {
+            if (IsObjectSquare) return false;
+            return _footprintGridSize.x == 1 || _footprintGridSize.y == 1;
+        }
 
         public Vector2Int RotatedSize => _rotatedFootprintGridSize;
 
         public GridObject GridObject = new GridObject(GridObjectState.Empty);
         public bool IsObjectSingleTile => _footprintGridSize.x == 1 && _footprintGridSize.y == 1;
+        public bool IsObjectSquare => _footprintGridSize.x == _footprintGridSize.y;
         public bool IsObjectVertical => RotatedSize.x < RotatedSize.y;
         public FootprintOrientation FootprintOrientation => IsObjectVertical ? 
             FootprintOrientation.Vertical :

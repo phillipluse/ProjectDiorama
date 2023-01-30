@@ -14,13 +14,5 @@ namespace ProjectDiorama
         {
             return new Vector3(size.x / 2, height, size.y / 2);
         }
-
-        public override Vector3 SpritePositionToCursor(Vector2 size, FootprintOrientation footPrintOrientation,
-            Vector2Int directions, int cellSize)
-
-        {
-            var halfTile = (float)cellSize / 2;
-            return new Vector3(size.x / 2 - halfTile, size.y / 2 - halfTile);
-        }
     }
 }

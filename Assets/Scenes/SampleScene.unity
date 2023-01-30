@@ -462,7 +462,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.3475589, y: -0.15449846, z: 0.05817627, w: 0.92301065}
+  m_LocalRotation: {x: 0.34755892, y: -0.15449844, z: 0.058176275, w: 0.92301065}
   m_LocalPosition: {x: 8.21, y: 8.65, z: -4.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1025,7 +1025,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259268140}
-  m_LocalRotation: {x: 0.3475589, y: -0.15449846, z: 0.05817627, w: 0.92301065}
+  m_LocalRotation: {x: 0.34755892, y: -0.15449844, z: 0.058176275, w: 0.92301065}
   m_LocalPosition: {x: 8.21, y: 8.65, z: -4.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1173,6 +1173,8 @@ MonoBehaviour:
   _tempShortcutObject2: {fileID: 2269672172588843444, guid: c8bf1ef6d5b640e4d9a8791e2c83f966,
     type: 3}
   _tempShortcutObject3: {fileID: 3593782204050520251, guid: 328cda2e1d42b58498b4e5c7e2fc8c33,
+    type: 3}
+  _tempShortcutObject4: {fileID: 4007498458147515068, guid: a29170fc4bea0e14591e68ad7a8a2af5,
     type: 3}
 --- !u!4 &1677425313
 Transform:

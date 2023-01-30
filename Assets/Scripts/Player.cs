@@ -9,6 +9,7 @@ namespace ProjectDiorama
         [SerializeField] GameObject _tempShortcutObject1;
         [SerializeField] GameObject _tempShortcutObject2;
         [SerializeField] GameObject _tempShortcutObject3;
+        [SerializeField] GameObject _tempShortcutObject4;
 
         ISelectable _selected;
         bool _isSelectPressed;
@@ -39,6 +40,12 @@ namespace ProjectDiorama
             if (input.IsThreeButtonPressedThisFrame && !HasActiveObject)
             {
                 CreateObject(_tempShortcutObject3);
+                return;
+            }
+
+            if (input.IsFourButtonPressedThisFrame && !HasActiveObject)
+            {
+                CreateObject(_tempShortcutObject4);
                 return;
             }
 
