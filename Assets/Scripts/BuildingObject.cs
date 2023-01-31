@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace ProjectDiorama
@@ -7,11 +8,10 @@ namespace ProjectDiorama
     {
         [Header("References")]
         [SerializeField] ObjectVisual _visual;
-        
-        [Header("Properties")]
-        [SerializeField] DirectionOffsetSettings _directionOffsetSettings;
 
         ObjectSettings _settings;
+        Vector3 _targetLocalPosition;
+        bool _isMoveCRRunning;
 
         public void SetUp()
         {
@@ -27,7 +27,7 @@ namespace ProjectDiorama
             var collider = gameObject.GetComponent<Collider>();
             var bounds = collider.bounds;
             var size = bounds.size;
-            _settings = new ObjectSettings(size, _directionOffsetSettings);
+            _settings = new ObjectSettings(size);
         }
 
         public void OnPlaced()
@@ -41,8 +41,10 @@ namespace ProjectDiorama
         public void OnRotate(RotationDirection dir)
         {
             _settings.SettingsUpdate(dir);
-            var offset = _settings.GetObjectOffset(dir);
-            transform.localPosition = new Vector3(offset.x, transform.localPosition.y, offset.z);
+            
+            _targetLocalPosition = _settings.Offset;
+            if (_isMoveCRRunning) return;
+            StartCoroutine(MoveCR());
         }
 
         public void Tick()
@@ -58,6 +60,22 @@ namespace ProjectDiorama
                 default: throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
+        
+        IEnumerator MoveCR()
+        {
+            _isMoveCRRunning = true;
+            
+            while (transform.localPosition != _targetLocalPosition)
+            {
+                var factor = 20.0f;
+                transform.localPosition = Vector3.Lerp(transform.localPosition, _targetLocalPosition, Time.deltaTime * factor);
+                Debug.Log("IsMoving");
+                yield return null;
+            }
+
+            _isMoveCRRunning = false;
+        }
+
 
         public ObjectSettings GetSettings() => _settings;
     }

@@ -1,16 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public enum ObjectState
-    {
-        None,
-        Normal,
-        Warning
-    }
-
     public class BaseObject : MonoBehaviour, ISelectable
     {
         IBaseObjectModule[] _objectModules;
@@ -19,6 +11,8 @@ namespace ProjectDiorama
         ObjectState _currentState = ObjectState.None;
         RotationDirection _currentFacingRotationDirection;
         Vector3 _currentGridWorldPosition;
+        Quaternion _targetRotation;
+        bool _isRotateCRRunning;
         
         public void OnHoverEnter()
         {
@@ -66,12 +60,39 @@ namespace ProjectDiorama
             _currentFacingRotationDirection = _currentFacingRotationDirection.Next();
 
             var angleToRotateBy = 90.0f;
-            transform.Rotate(transform.up, angleToRotateBy);
+
+            _targetRotation = Quaternion.Euler(0, _currentFacingRotationDirection.RotationAngle(), 0);
+
+            Debug.Log($"{_currentFacingRotationDirection.RotationAngle()}");
+
+
+            // transform.rotation = _targetRotation;
+            
+            // transform.Rotate(transform.up, angleToRotateBy);
+
+            if (!_isRotateCRRunning)
+            {
+                StartCoroutine(RotateCR());
+            }
 
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
             {
                 baseObjectModule.OnRotate(_currentFacingRotationDirection);
             }
+        }
+
+        IEnumerator RotateCR()
+        {
+            _isRotateCRRunning = true;
+            while (transform.rotation != _targetRotation)
+            {
+                var factor = 20.0f;
+                transform.rotation = Quaternion.Lerp(transform.rotation, _targetRotation, Time.deltaTime * factor);
+                Debug.Log($"IsRotating; Target Rotation: {_targetRotation.eulerAngles}");
+                yield return null;
+            }
+
+            _isRotateCRRunning = false;
         }
 
         public void Init()

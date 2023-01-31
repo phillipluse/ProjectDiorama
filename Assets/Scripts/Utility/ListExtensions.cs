@@ -5,14 +5,13 @@ namespace ProjectDiorama
 {
     public static class ListExtensions
     {
-        public static void GetAllPositions(this List<GridPositionXZ> list, Vector2Int size,
-            GridPositionXZ startPositionXZ, Vector2Int dir)
+        public static void GetAllPositions(this List<GridPositionXZ> list, Vector2Int size, GridPositionXZ startPositionXZ)
         {
             for (int x = 0; x < size.x; x++)
             {
                 for (int y = 0; y < size.y; y++)
                 {
-                    list.Add(new GridPositionXZ(startPositionXZ.X + x * dir.x, startPositionXZ.Z + y * dir.y));
+                    list.Add(new GridPositionXZ(startPositionXZ.X + x, startPositionXZ.Z + y));
                 }
             }
         }

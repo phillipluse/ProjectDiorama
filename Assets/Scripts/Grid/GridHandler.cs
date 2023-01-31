@@ -42,7 +42,7 @@ namespace ProjectDiorama
             if (!settings.IsObjectSingleTile)
             {
                 var positions = ListPool<GridPositionXZ>.Get();
-                positions.GetAllPositions(settings.RotatedSize, startPosition, settings.Directions);
+                positions.GetAllPositions(settings.RotatedSize, startPosition);
 
                 foreach (GridPositionXZ position in positions)
                 {

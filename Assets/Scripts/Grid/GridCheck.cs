@@ -50,7 +50,7 @@ namespace ProjectDiorama
             var neighborObjects = ListPool<GridObject>.Get();
             var neighborPositionsToCheck = ListPool<GridPositionXZ>.Get();
 
-            tilePositionsToCheck.GetAllPositions(size, startPosition, settings.Directions);
+            tilePositionsToCheck.GetAllPositions(size, startPosition);
 
             if (!ArePositionsOnGrid(tilePositionsToCheck))
             {

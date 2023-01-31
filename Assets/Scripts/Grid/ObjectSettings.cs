@@ -4,27 +4,43 @@ namespace ProjectDiorama
 {
     public class ObjectSettings
     {
-        public Vector2Int Directions { get; private set; }
+        public Vector3 Offset { get; private set; }
 
-        //x = width, y = length (Z axis)
-        readonly DirectionOffsetSettings _directionOffsetSettings;
         readonly Vector3 _startObjectSize;
-        readonly Vector2Int _footprintGridSize;
+        readonly Vector2Int _footprintGridSize; //x = width, y = length (Z axis)
 
         Vector2Int _rotatedFootprintGridSize;
-
-        public ObjectSettings(Vector3 objectSize, DirectionOffsetSettings offsetSettings)
+        
+        public ObjectSettings(Vector3 objectSize)
         {
             _startObjectSize = objectSize;
-            _directionOffsetSettings = offsetSettings;
             _footprintGridSize = CalculateFootprintGridSize();
+            
             SettingsUpdate(RotationDirection.Up);
         }
 
         public void SettingsUpdate(RotationDirection dir)
         {
             _rotatedFootprintGridSize = SizePerRotation(dir);
-            Directions = SetDirections(dir);
+            Offset = ObjectOffset(dir);
+        }
+
+        Vector3 ObjectOffset(RotationDirection dir)
+        {
+            float height = _startObjectSize.y / 2;
+            float halfX = (float)_footprintGridSize.x / 2;
+            float halfY = (float)_footprintGridSize.y / 2;
+            const int posDir = 1;
+            const int negDir = -1;
+            
+            return dir switch
+            {
+                RotationDirection.Up    => new Vector3(halfX * posDir, height, halfY * posDir),
+                RotationDirection.Right => new Vector3(halfX * negDir, height, halfY * posDir),
+                RotationDirection.Down  => new Vector3(halfX * negDir, height, halfY * negDir),
+                RotationDirection.Left  => new Vector3(halfX * posDir, height, halfY * negDir),
+                _   => new Vector3(0.0f, 0.0f)
+            };
         }
 
         Vector2Int CalculateFootprintGridSize()
@@ -33,17 +49,6 @@ namespace ProjectDiorama
             var width = Mathf.CeilToInt(_startObjectSize.x / cellSize);
             var length = Mathf.CeilToInt(_startObjectSize.z / cellSize);
             return new Vector2Int(width, length);
-        }
-        
-        public Vector3 GetObjectOffset(RotationDirection dir)
-        {
-            var cellSize = GameWorld.ActiveGridCellSize;
-            return _directionOffsetSettings.ObjectOffset(_footprintGridSize, _startObjectSize.y, dir, Directions, cellSize);
-        }
-        
-        Vector2Int SetDirections(RotationDirection dir)
-        {
-            return _directionOffsetSettings.DirectionsPerRotation(dir);
         }
         
         Vector2Int SizePerRotation(RotationDirection dir)
@@ -60,16 +65,8 @@ namespace ProjectDiorama
 
             return newSize;
         }
-        
-        bool IsObjectSingleMultiRectangle()
-        {
-            if (IsObjectSquare) return false;
-            return _footprintGridSize.x == 1 || _footprintGridSize.y == 1;
-        }
 
         public Vector2Int RotatedSize => _rotatedFootprintGridSize;
-
-        public GridObject GridObject = new GridObject(GridObjectState.Empty);
         public bool IsObjectSingleTile => _footprintGridSize.x == 1 && _footprintGridSize.y == 1;
         public bool IsObjectSquare => _footprintGridSize.x == _footprintGridSize.y;
         public bool IsObjectVertical => RotatedSize.x < RotatedSize.y;
