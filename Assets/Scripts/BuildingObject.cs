@@ -4,13 +4,15 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public class BuildingObject : MonoBehaviour, IBaseObjectModule, IObjectSettings
+    public class BuildingObject : MonoBehaviour, IBaseObjectModule, ISelectable
     {
         [Header("References")]
         [SerializeField] ObjectVisual _visual;
 
+        BaseObject _baseObject;
         ObjectSettings _settings;
         Vector3 _targetLocalPosition;
+        IEnumerator _moveCO;
         bool _isMoveCRRunning;
 
         public void SetUp()
@@ -22,20 +24,41 @@ namespace ProjectDiorama
             // _settings = new ObjectSettings(footprint, _directionOffsetSettings);
         }
 
-        public void Init()
+        public void Init(BaseObject baseObject)
         {
-            var collider = gameObject.GetComponent<Collider>();
-            var bounds = collider.bounds;
+            _baseObject = baseObject;
+            
+            var col = gameObject.GetComponent<Collider>();
+            var bounds = col.bounds;
             var size = bounds.size;
             _settings = new ObjectSettings(size);
+            
+            MoveTo(_settings.Offset);
+
+            _visual.Init();
+        }
+
+        public void OnHoverEnter()
+        {
+            _visual.OnHoverEnter();
+        }
+
+        public void OnHoverExit()
+        {
+            _visual.OnHoverExit();
         }
 
         public void OnPlaced()
         {
+            gameObject.layer = LayerMask.NameToLayer("PlacedObject");
+            if (!_isMoveCRRunning) return;
+            MoveTo(_targetLocalPosition);
+            StopCoroutine(_moveCO);
         }
 
         public void OnMove()
         {
+           
         }
 
         public void OnRotate(RotationDirection dir)
@@ -44,7 +67,8 @@ namespace ProjectDiorama
             
             _targetLocalPosition = _settings.Offset;
             if (_isMoveCRRunning) return;
-            StartCoroutine(MoveCR());
+            _moveCO = MoveCO();
+            StartCoroutine(_moveCO);
         }
 
         public void Tick()
@@ -60,28 +84,29 @@ namespace ProjectDiorama
                 default: throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
-        
-        IEnumerator MoveCR()
+
+        IEnumerator MoveCO()
         {
             _isMoveCRRunning = true;
             
             while (transform.localPosition != _targetLocalPosition)
             {
                 var factor = 20.0f;
-                transform.localPosition = Vector3.Lerp(transform.localPosition, _targetLocalPosition, Time.deltaTime * factor);
-                Debug.Log("IsMoving");
+                var newPosition = Vector3.Lerp(transform.localPosition, _targetLocalPosition, Time.deltaTime * factor);
+                MoveTo(newPosition);
                 yield return null;
             }
 
             _isMoveCRRunning = false;
         }
 
+        void MoveTo(Vector3 position)
+        {
+            transform.localPosition = position;
+        }
 
         public ObjectSettings GetSettings() => _settings;
-    }
 
-    public interface IObjectSettings
-    {
-        public ObjectSettings GetSettings();
+        public BaseObject GetBaseObject() => _baseObject;
     }
 }

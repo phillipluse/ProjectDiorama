@@ -11,7 +11,7 @@ namespace ProjectDiorama
         [SerializeField] GameObject _tempShortcutObject3;
         [SerializeField] GameObject _tempShortcutObject4;
 
-        ISelectable _selected;
+        BaseObject _selectedBaseObject;
         bool _isSelectPressed;
         bool _isRotatePressed;
         
@@ -63,13 +63,13 @@ namespace ProjectDiorama
         void CheckIfMoving()
         {
             if (!HasActiveObject) return;
-            _selected.Move(_playerPosition.Position);
+            _selectedBaseObject.Move(_playerPosition.Position);
         }
 
         void CheckIfRotate()
         {
             if (!_isRotatePressed) return;
-            _selected.Rotate();
+            _selectedBaseObject.Rotate();
             _isRotatePressed = false;
         }
 
@@ -90,15 +90,15 @@ namespace ProjectDiorama
 
             if (_playerPosition.IsOverSelectable)
             {
-                _playerPosition.CurrentSelectable.OnSelect();
+                _playerPosition.CurrentBaseObject.OnSelect();
             }
         }
 
         void PlaceObject()
         {
-            if (_selected.TryToPlaceObject(_playerPosition.Position))
+            if (_selectedBaseObject.TryToPlaceObject(_playerPosition.Position))
             {
-                _selected = null;
+                _selectedBaseObject = null;
             }
         }
 
@@ -106,13 +106,13 @@ namespace ProjectDiorama
         {
             var newGo = Instantiate(go, _playerPosition.Position, Quaternion.identity);
             
-            if (newGo.TryGetComponent(out ISelectable selectable))
+            if (newGo.TryGetComponent(out BaseObject baseObject))
             {
-                _selected = selectable;
-                selectable.OnSelect();
+                _selectedBaseObject = baseObject;
+                baseObject.OnSelect();
             }
         }
 
-        bool HasActiveObject => _selected != null;
+        bool HasActiveObject => _selectedBaseObject != null;
     }
 }

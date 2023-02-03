@@ -3,25 +3,32 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public class BaseObject : MonoBehaviour, ISelectable
+    public class BaseObject : MonoBehaviour
     {
         IBaseObjectModule[] _objectModules;
-        IObjectSettings _objectSettings;
+        ObjectSettings _objectSettings;
 
         ObjectState _currentState = ObjectState.None;
         RotationDirection _currentFacingRotationDirection;
         Vector3 _currentGridWorldPosition;
         Quaternion _targetRotation;
+        IEnumerator _rotateCO;
         bool _isRotateCRRunning;
         
         public void OnHoverEnter()
         {
-            Debug.Log("Hover Enter");
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.OnHoverEnter();
+            }
         }
 
         public void OnHoverExit()
         {
-            Debug.Log("Hover Exit");
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.OnHoverExit();
+            }
         }
 
         public void OnSelect()
@@ -38,8 +45,21 @@ namespace ProjectDiorama
         {
             if (_currentState == ObjectState.Warning) return false;
             var gridWorldPosition = GameWorld.ActiveGrid.GetGridWorldPosition(position);
-            transform.position = gridWorldPosition;
-            GameWorld.ActiveGrid.SetObjectToGrid(gridWorldPosition, ObjectSettings);
+            MoveTo(gridWorldPosition);
+
+            if (_isRotateCRRunning)
+            {
+                RotateTo(_targetRotation);
+                StopCoroutine(_rotateCO);
+            }
+
+            GameWorld.ActiveGrid.SetObjectToGrid(gridWorldPosition, _objectSettings);
+            
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.OnPlaced();
+            }
+            
             return true;
         }
 
@@ -49,30 +69,24 @@ namespace ProjectDiorama
             {
                 _currentGridWorldPosition = GameWorld.ActiveGrid.GetGridWorldPosition(position);
             }
-            var factor = 20.0f;
-            transform.position = Vector3.Lerp(transform.position, _currentGridWorldPosition, Time.deltaTime * factor);
-
+            
+            const float factor = 20.0f;
+            var newPosition = Vector3.Lerp(transform.position, 
+                _currentGridWorldPosition, Time.deltaTime * factor);
+            MoveTo(newPosition);
+            
             SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
         }
 
         public void Rotate()
         {
             _currentFacingRotationDirection = _currentFacingRotationDirection.Next();
-
-            var angleToRotateBy = 90.0f;
-
             _targetRotation = Quaternion.Euler(0, _currentFacingRotationDirection.RotationAngle(), 0);
-
-            Debug.Log($"{_currentFacingRotationDirection.RotationAngle()}");
-
-
-            // transform.rotation = _targetRotation;
-            
-            // transform.Rotate(transform.up, angleToRotateBy);
 
             if (!_isRotateCRRunning)
             {
-                StartCoroutine(RotateCR());
+                _rotateCO = RotateCO();
+                StartCoroutine(_rotateCO);
             }
 
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
@@ -81,45 +95,56 @@ namespace ProjectDiorama
             }
         }
 
-        IEnumerator RotateCR()
+        IEnumerator RotateCO()
         {
             _isRotateCRRunning = true;
-            while (transform.rotation != _targetRotation)
+            while (transform.rotation.eulerAngles.y != _targetRotation.eulerAngles.y)
             {
-                var factor = 20.0f;
-                transform.rotation = Quaternion.Lerp(transform.rotation, _targetRotation, Time.deltaTime * factor);
-                Debug.Log($"IsRotating; Target Rotation: {_targetRotation.eulerAngles}");
+                const float factor = 20.0f;
+                var newRotation = Quaternion.Lerp(transform.rotation, 
+                    _targetRotation, Time.deltaTime * factor);
+                RotateTo(newRotation);
                 yield return null;
             }
 
             _isRotateCRRunning = false;
         }
 
-        public void Init()
+        void MoveTo(Vector3 position)
+        {
+            transform.position = position;
+        }
+
+        void RotateTo(Quaternion rotation)
+        {
+            transform.rotation = rotation;
+        }
+
+        void Init()
         {
             _objectModules = GetComponentsInChildren<IBaseObjectModule>();
 
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
             {
-                baseObjectModule.Init();
+                baseObjectModule.Init(this);
             }
 
-            _objectSettings = SetObjectSettings();
+            _objectSettings = GetObjectSettings();
             
             SetState(ObjectState.Normal);
         }
 
         bool ObjectCanBePlacedAtPosition(Vector3 position)
         {
-            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, ObjectSettings);
+            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, _objectSettings);
         }
 
-        IObjectSettings SetObjectSettings()
+        ObjectSettings GetObjectSettings()
         {
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
             {
-                if (baseObjectModule is not IObjectSettings objectSettings) continue;
-                return objectSettings;
+                if (baseObjectModule is not ISelectable selectable) continue;
+                return selectable.GetSettings();
             }
 
             return null;
@@ -139,7 +164,5 @@ namespace ProjectDiorama
                 baseObjectModule.OnObjectStateEnter(state);
             }
         }
-
-        public ObjectSettings ObjectSettings => _objectSettings.GetSettings();
     }
 }

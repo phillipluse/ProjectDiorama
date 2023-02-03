@@ -27,9 +27,10 @@ namespace ProjectDiorama
 
         Vector3 ObjectOffset(RotationDirection dir)
         {
+            var cellSize = GameWorld.ActiveGridCellSize;
             float height = _startObjectSize.y / 2;
-            float halfX = (float)_footprintGridSize.x / 2;
-            float halfY = (float)_footprintGridSize.y / 2;
+            float halfX = IsObjectSingleTile ? (float)cellSize / 2 : (float)_footprintGridSize.x / 2 * cellSize;
+            float halfY = IsObjectSingleTile ? (float)cellSize / 2 : (float)_footprintGridSize.y / 2 * cellSize;
             const int posDir = 1;
             const int negDir = -1;
             

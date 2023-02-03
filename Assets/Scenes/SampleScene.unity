@@ -1146,7 +1146,7 @@ MonoBehaviour:
     type: 3}
   _tempShortcutObject3: {fileID: 3593782204050520251, guid: 328cda2e1d42b58498b4e5c7e2fc8c33,
     type: 3}
-  _tempShortcutObject4: {fileID: 4007498458147515068, guid: a29170fc4bea0e14591e68ad7a8a2af5,
+  _tempShortcutObject4: {fileID: 8344064740564755786, guid: 61ee2b9b83cdcae4e9724c0324f48f2a,
     type: 3}
 --- !u!4 &1677425313
 Transform:
@@ -1178,6 +1178,9 @@ MonoBehaviour:
   _gridLayerMask:
     serializedVersion: 2
     m_Bits: 2147483648
+  _objectLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &1677425315
 MonoBehaviour:
   m_ObjectHideFlags: 0

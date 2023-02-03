@@ -7,9 +7,10 @@ namespace ProjectDiorama
     public class PlayerPosition : MonoBehaviour
     {
         [SerializeField] LayerMask _gridLayerMask;
+        [SerializeField] LayerMask _objectLayerMask;
         
         public bool IsPlayerOverGrid { get; private set; }
-        ISelectable _currentISelectable;
+        BaseObject _currentBaseObject;
         
         RaycastHit _hit;
 
@@ -17,39 +18,41 @@ namespace ProjectDiorama
         {
             IsPlayerOverGrid = MousePosition.IsPositionOverLayerMask(_gridLayerMask, out _hit);
 
-            // CheckIfOverSelectableObject();
+            CheckIfOverSelectableObject();
         }
 
         void CheckIfOverSelectableObject()
         {
             if (IsOverSelectableObject(out ISelectable selectable))
             {
-                if (_currentISelectable == selectable) return;
-                if (_currentISelectable != null)
+                var baseObject = selectable.GetBaseObject();
+                
+                if (_currentBaseObject == baseObject) return;
+                if (_currentBaseObject)
                 {
-                    _currentISelectable.OnHoverExit();
+                    _currentBaseObject.OnHoverExit();
                 }
 
-                _currentISelectable = selectable;
-                selectable.OnHoverEnter();
+                _currentBaseObject = baseObject;
+                baseObject.OnHoverEnter();
                 return;
             }
 
-            if (_currentISelectable == null) return;
-            _currentISelectable.OnHoverExit();
-            _currentISelectable = null;
+            if (!_currentBaseObject) return;
+            _currentBaseObject.OnHoverExit();
+            _currentBaseObject = null;
         }
 
 
         bool IsOverSelectableObject(out ISelectable selectable)
         {
-            if (!IsOverObject)
+            if (!MousePosition.IsPositionOverLayerMask(_objectLayerMask, out RaycastHit hit))
             {
                 selectable = null;
                 return false;
             }
             
-            if (_hit.transform.gameObject.TryGetComponent(out ISelectable s))
+            if (hit.transform.gameObject.TryGetComponent(out ISelectable s))
             {
                 selectable = s;
                 return true;
@@ -65,9 +68,8 @@ namespace ProjectDiorama
             return dot == 1;
         }
 
-        public ISelectable CurrentSelectable => _currentISelectable;
+        public BaseObject CurrentBaseObject => _currentBaseObject;
         public Vector3 Position => IsPlayerOverGrid ? _hit.point : Vector3.zero;
-        public bool IsOverObject => _hit.collider != null;
-        public bool IsOverSelectable => _currentISelectable != null;
+        public bool IsOverSelectable => _currentBaseObject != null;
     }
 }
