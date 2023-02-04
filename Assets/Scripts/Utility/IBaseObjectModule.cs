@@ -2,11 +2,6 @@ namespace ProjectDiorama
 {
     public interface IBaseObjectModule
     {
-        /// <summary>
-        /// Called at Object creation. Called prior to Init.
-        /// </summary>
-        /// <param name="b"></param>
-        public void SetUp();
 
         /// <summary>
         /// Called at Object creation. Use to set up properties. Should only call once in life span of Object.
@@ -16,10 +11,9 @@ namespace ProjectDiorama
         
         public void OnHoverEnter();
         public void OnHoverExit();
+        public void OnSelected();
+        public void OnDeSelect();
         
-        /// <summary>
-        /// Use to start or continue logic and function of tile.
-        /// </summary>
         public void OnPlaced();
 
         public void OnMove();

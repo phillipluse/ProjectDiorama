@@ -5,15 +5,41 @@ namespace ProjectDiorama
 {
     public class BaseObject : MonoBehaviour
     {
+        public ISelectable Selectable { get; private set; }
+        public Vector3 CurrentGridWorldPosition { get; private set; }
+        
         IBaseObjectModule[] _objectModules;
-        ObjectSettings _objectSettings;
 
         ObjectState _currentState = ObjectState.None;
         RotationDirection _currentFacingRotationDirection;
-        Vector3 _currentGridWorldPosition;
         Quaternion _targetRotation;
         IEnumerator _rotateCO;
         bool _isRotateCRRunning;
+        bool _isInitialized;
+       
+        public void Init(Vector3 position)
+        {
+            if (_isInitialized) return;
+            _objectModules = GetComponentsInChildren<IBaseObjectModule>();
+          
+            SetState(ObjectState.Normal);
+            
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.Init(this);
+            }
+
+            Selectable = GetObjectSettings();
+            
+            if (IsOnGrid(position))
+            {
+                CurrentGridWorldPosition = GetGridWorldPosition(position);
+                SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
+            }
+            
+            Events.AnyObjectInitialized(this);
+            _isInitialized = true;
+        }
         
         public void OnHoverEnter()
         {
@@ -31,10 +57,16 @@ namespace ProjectDiorama
             }
         }
 
-        public void OnSelect()
+        public void OnSelected()
         {
-            Events.AnyObjectOnSelected(gameObject);
-            Init();
+            RemoveFromGrid();
+            
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.OnSelected();
+            }
+            
+            Events.AnyObjectSelected(this);
         }
 
         public void OnDeSelect()
@@ -44,38 +76,39 @@ namespace ProjectDiorama
         public bool TryToPlaceObject(Vector3 position)
         {
             if (_currentState == ObjectState.Warning) return false;
-            var gridWorldPosition = GameWorld.ActiveGrid.GetGridWorldPosition(position);
-            MoveTo(gridWorldPosition);
+            MoveTo(CurrentGridWorldPosition);
 
             if (_isRotateCRRunning)
             {
                 RotateTo(_targetRotation);
                 StopCoroutine(_rotateCO);
+                _isRotateCRRunning = false;
             }
-
-            GameWorld.ActiveGrid.SetObjectToGrid(gridWorldPosition, _objectSettings);
+            
+            AddToGrid();
             
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
             {
                 baseObjectModule.OnPlaced();
             }
             
+            Events.AnyObjectPlaced(this);
             return true;
         }
 
         public void Move(Vector3 position)
         {
-            if (GameWorld.ActiveGrid.IsPositionOnGrid(position))
+            if (IsOnGrid(position))
             {
-                _currentGridWorldPosition = GameWorld.ActiveGrid.GetGridWorldPosition(position);
+                CurrentGridWorldPosition = GetGridWorldPosition(position);
+                SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
             }
             
             const float factor = 20.0f;
             var newPosition = Vector3.Lerp(transform.position, 
-                _currentGridWorldPosition, Time.deltaTime * factor);
-            MoveTo(newPosition);
+                CurrentGridWorldPosition, Time.deltaTime * factor);
             
-            SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
+            MoveTo(newPosition);
         }
 
         public void Rotate()
@@ -103,7 +136,9 @@ namespace ProjectDiorama
                 const float factor = 20.0f;
                 var newRotation = Quaternion.Lerp(transform.rotation, 
                     _targetRotation, Time.deltaTime * factor);
+                
                 RotateTo(newRotation);
+                
                 yield return null;
             }
 
@@ -120,31 +155,12 @@ namespace ProjectDiorama
             transform.rotation = rotation;
         }
 
-        void Init()
-        {
-            _objectModules = GetComponentsInChildren<IBaseObjectModule>();
-
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
-            {
-                baseObjectModule.Init(this);
-            }
-
-            _objectSettings = GetObjectSettings();
-            
-            SetState(ObjectState.Normal);
-        }
-
-        bool ObjectCanBePlacedAtPosition(Vector3 position)
-        {
-            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, _objectSettings);
-        }
-
-        ObjectSettings GetObjectSettings()
+        ISelectable GetObjectSettings()
         {
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
             {
                 if (baseObjectModule is not ISelectable selectable) continue;
-                return selectable.GetSettings();
+                return selectable;
             }
 
             return null;
@@ -163,6 +179,31 @@ namespace ProjectDiorama
             {
                 baseObjectModule.OnObjectStateEnter(state);
             }
+        }
+        
+        bool ObjectCanBePlacedAtPosition(Vector3 position)
+        {
+            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, Selectable.GetSettings());
+        }
+
+        bool IsOnGrid(Vector3 position)
+        {
+            return GameWorld.ActiveGrid.IsPositionOnGrid(position);
+        }
+
+        Vector3 GetGridWorldPosition(Vector3 position)
+        {
+            return GameWorld.ActiveGrid.GetGridWorldPosition(position);
+        }
+
+        void AddToGrid()
+        {
+            GameWorld.ActiveGrid.AddObjectToGrid(CurrentGridWorldPosition, Selectable.GetSettings());
+        }
+
+        void RemoveFromGrid()
+        {
+            GameWorld.ActiveGrid.RemoveObjectFromGrid(CurrentGridWorldPosition, Selectable.GetSettings());
         }
     }
 }

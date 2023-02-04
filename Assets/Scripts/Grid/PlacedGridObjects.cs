@@ -16,6 +16,11 @@ namespace ProjectDiorama
             _gridObjects.Add(gridObject);
         }
 
+        public void Remove(GridObject gridObject)
+        {
+            _gridObjects.Remove(gridObject);
+        }
+
 
         public int Count => _gridObjects.Count;
         public List<GridObject> GridObjects() => _gridObjects;

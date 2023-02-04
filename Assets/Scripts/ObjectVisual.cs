@@ -11,10 +11,12 @@ namespace ProjectDiorama
         [Header("Properties")]
         [SerializeField] Material _normalMaterial;
         [SerializeField] Material _warningMaterial;
+        [SerializeField] Material _ghostMaterial;
 
         public void Init()
         {
             _outline.enabled = false;
+            SetToGhost();
         }
 
         public void OnHoverEnter()
@@ -27,14 +29,34 @@ namespace ProjectDiorama
             _outline.enabled = false;
         }
 
+        public void OnSelect()
+        {
+            SetToGhost();
+        }
+
+        public void OnPlaced()
+        {
+            SetToNormal();
+        }
+
         public void SetToNormal()
         {
-            _meshRenderer.material = _normalMaterial;
+            SetMaterial(_normalMaterial);
         }
 
         public void SetToWarning()
         {
-            _meshRenderer.material = _warningMaterial;
+            SetMaterial(_warningMaterial);
+        }
+
+        public void SetToGhost()
+        {
+            SetMaterial(_ghostMaterial);
+        }
+
+        void SetMaterial(Material material)
+        {
+            _meshRenderer.material = material;
         }
     }
 }

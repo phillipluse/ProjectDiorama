@@ -90,7 +90,8 @@ namespace ProjectDiorama
 
             if (_playerPosition.IsOverSelectable)
             {
-                _playerPosition.CurrentBaseObject.OnSelect();
+                _selectedBaseObject = _playerPosition.BaseObjectAtPosition;
+                _selectedBaseObject.OnSelected();
             }
         }
 
@@ -109,10 +110,10 @@ namespace ProjectDiorama
             if (newGo.TryGetComponent(out BaseObject baseObject))
             {
                 _selectedBaseObject = baseObject;
-                baseObject.OnSelect();
+                baseObject.Init(_playerPosition.Position);
             }
         }
 
-        bool HasActiveObject => _selectedBaseObject != null;
+        public bool HasActiveObject => _selectedBaseObject != null;
     }
 }

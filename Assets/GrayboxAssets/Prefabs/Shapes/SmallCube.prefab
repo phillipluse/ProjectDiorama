@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5244585108149116677}
   - component: {fileID: 622463209238505492}
   - component: {fileID: 1819123684016732618}
-  - component: {fileID: 1303557159491811087}
   - component: {fileID: 2965577768214955078}
   - component: {fileID: 202696549541981167}
+  - component: {fileID: -7183557224268184524}
   - component: {fileID: 4373047601926151761}
   m_Layer: 2
   m_Name: SmallCube
@@ -325,14 +325,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1303557159491811087
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204450163195803042}
-  m_Mesh: {fileID: 0}
 --- !u!65 &2965577768214955078
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -366,8 +358,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e92598e2a1d78a84b9c199c9edc6bd96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _visual: {fileID: 0}
+  _visual: {fileID: -7183557224268184524}
+  _moveHeightOffset: 0.2
+--- !u!114 &-7183557224268184524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1204450163195803042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed5ce142566a6324f94050f3d84b26c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 1819123684016732618}
   _outline: {fileID: 4373047601926151761}
+  _normalMaterial: {fileID: 2100000, guid: ecc4e406eb17f734c924679b49947d13, type: 2}
+  _warningMaterial: {fileID: 2100000, guid: d03894ad4bddd484d901defbea276b03, type: 2}
+  _ghostMaterial: {fileID: 2100000, guid: be4c1884bfd37724984e9d8dbe164283, type: 2}
 --- !u!114 &4373047601926151761
 MonoBehaviour:
   m_ObjectHideFlags: 0

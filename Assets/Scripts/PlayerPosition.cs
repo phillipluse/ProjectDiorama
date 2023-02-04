@@ -1,23 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace ProjectDiorama
 {
     public class PlayerPosition : MonoBehaviour
     {
+        [Header("Properties")]
         [SerializeField] LayerMask _gridLayerMask;
         [SerializeField] LayerMask _objectLayerMask;
-        
-        public bool IsPlayerOverGrid { get; private set; }
-        BaseObject _currentBaseObject;
+
+        BaseObject _baseObjectAtPosition;
+        bool _isPlayerOverGrid;
         
         RaycastHit _hit;
 
+        void OnEnable()
+        {
+            Events.AnyObjectSelectedEvent += OnObjectSelect;
+        }
+
         public void Tick()
         {
-            IsPlayerOverGrid = MousePosition.IsPositionOverLayerMask(_gridLayerMask, out _hit);
+            _isPlayerOverGrid = MousePosition.IsPositionOverLayerMask(_gridLayerMask, out _hit);
 
+            if (GameWorld.IsObjectBeingPlaced) return;
             CheckIfOverSelectableObject();
         }
 
@@ -26,21 +32,11 @@ namespace ProjectDiorama
             if (IsOverSelectableObject(out ISelectable selectable))
             {
                 var baseObject = selectable.GetBaseObject();
-                
-                if (_currentBaseObject == baseObject) return;
-                if (_currentBaseObject)
-                {
-                    _currentBaseObject.OnHoverExit();
-                }
-
-                _currentBaseObject = baseObject;
-                baseObject.OnHoverEnter();
+                ChangeBaseObject(baseObject);
                 return;
             }
 
-            if (!_currentBaseObject) return;
-            _currentBaseObject.OnHoverExit();
-            _currentBaseObject = null;
+            Release();
         }
 
 
@@ -67,9 +63,33 @@ namespace ProjectDiorama
             var dot = Vector3.Dot(direction, Vector3.up);
             return dot == 1;
         }
+        
+        void OnObjectSelect(BaseObject baseObject)
+        {
+            Release();
+        }
 
-        public BaseObject CurrentBaseObject => _currentBaseObject;
-        public Vector3 Position => IsPlayerOverGrid ? _hit.point : Vector3.zero;
-        public bool IsOverSelectable => _currentBaseObject != null;
+        void ChangeBaseObject(BaseObject baseObject)
+        {
+            if (_baseObjectAtPosition == baseObject) return;
+            if (_baseObjectAtPosition)
+            {
+                _baseObjectAtPosition.OnHoverExit();
+            }
+            
+            _baseObjectAtPosition = baseObject;
+            baseObject.OnHoverEnter();
+        }
+
+        void Release()
+        {
+            if (!_baseObjectAtPosition) return;
+            _baseObjectAtPosition.OnHoverExit();
+            _baseObjectAtPosition = null;
+        }
+
+        public BaseObject BaseObjectAtPosition => _baseObjectAtPosition;
+        public Vector3 Position => _isPlayerOverGrid ? _hit.point : Vector3.zero;
+        public bool IsOverSelectable => _baseObjectAtPosition != null;
     }
 }

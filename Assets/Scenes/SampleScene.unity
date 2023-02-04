@@ -785,6 +785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gridHandler: {fileID: 505500804}
+  _player: {fileID: 1677425312}
 --- !u!1 &745419827
 GameObject:
   m_ObjectHideFlags: 0

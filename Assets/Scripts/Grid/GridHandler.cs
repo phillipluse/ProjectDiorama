@@ -34,7 +34,19 @@ namespace ProjectDiorama
             _gridCheck = new GridCheck(this);
         }
 
-        public void SetObjectToGrid(Vector3 worldPosition, ObjectSettings settings)
+        public void AddObjectToGrid(Vector3 worldPosition, ObjectSettings settings)
+        {
+            UpdateGridAtPositions(worldPosition, settings, _occupiedGridObject, out var modifiedPositions);
+            AddToPlacedGridObjects(modifiedPositions);
+        }
+
+        public void RemoveObjectFromGrid(Vector3 worldPosition, ObjectSettings settings)
+        {
+            UpdateGridAtPositions(worldPosition, settings, _emptyGridObject, out var modifiedPositions);
+            RemoveFromPlacedGridObjects(modifiedPositions);
+        }
+
+        void UpdateGridAtPositions(Vector3 worldPosition, ObjectSettings settings, GridObject gridObject, out List<GridPositionXZ> modifiedPositions)
         {
             var startPosition = GetGridPosition(worldPosition);
             var placedTileList = ListPool<GridPositionXZ>.Get();
@@ -46,7 +58,7 @@ namespace ProjectDiorama
 
                 foreach (GridPositionXZ position in positions)
                 {
-                    AddGridObjectToGridArray(position, _occupiedGridObject);
+                    UpdateGridArray(position, gridObject);
                     placedTileList.Add(position);
                 }
                 
@@ -54,13 +66,11 @@ namespace ProjectDiorama
             }
             else
             {
-                AddGridObjectToGridArray(startPosition, _occupiedGridObject);
+                UpdateGridArray(startPosition, gridObject);
                 placedTileList.Add(startPosition);
             }
 
-            // Log($"Tile Set To Grid");
-            ObjectSetToGrid?.Invoke(settings, placedTileList);
-            AddToPlacedTiles(placedTileList);
+            modifiedPositions = placedTileList;
             ListPool<GridPositionXZ>.Release(placedTileList);
         }
 
@@ -72,7 +82,6 @@ namespace ProjectDiorama
         /// <returns></returns>
         public bool CanPlaceObjectAtPosition(Vector3 worldPosition, ObjectSettings settings)
         {
-            if (!IsPositionOnGrid(worldPosition)) return false;
             return settings.IsObjectSingleTile ? 
                 _gridCheck.SingleTileCheck(worldPosition, settings) : 
                 _gridCheck.MultipleTileCheck(worldPosition, settings);
@@ -116,7 +125,7 @@ namespace ProjectDiorama
             return _grid.GetGridPosition(worldPosition);
         }
 
-        void AddGridObjectToGridArray(GridPositionXZ gridPositionXZ, GridObject gridObject)
+        void UpdateGridArray(GridPositionXZ gridPositionXZ, GridObject gridObject)
         {
             _grid.UpdateGridArrayOnTilePlaced(gridPositionXZ, gridObject);
         }
@@ -145,11 +154,19 @@ namespace ProjectDiorama
             return neighborPositions;
         }
         
-        void AddToPlacedTiles(List<GridPositionXZ> gridPositions)
+        void AddToPlacedGridObjects(List<GridPositionXZ> gridPositions)
         {
             foreach (var position in gridPositions)  
             {
                 _placedGridObjects.Add(_grid.GetGridObject(position));
+            }
+        }
+
+        void RemoveFromPlacedGridObjects(List<GridPositionXZ> gridPositions)
+        {
+            foreach (var position in gridPositions)  
+            {
+                _placedGridObjects.Remove(_grid.GetGridObject(position));
             }
         }
         
