@@ -4,33 +4,31 @@ namespace ProjectDiorama
 {
     public class ObjectSettings
     {
-        public Vector3 Offset { get; private set; }
+        public Vector2Int FootprintGridSize { get; } //x = width, y = length (Z axis)
 
         readonly Vector3 _startObjectSize;
-        readonly Vector2Int _footprintGridSize; //x = width, y = length (Z axis)
 
         Vector2Int _rotatedFootprintGridSize;
         
         public ObjectSettings(Vector3 objectSize)
         {
             _startObjectSize = objectSize;
-            _footprintGridSize = CalculateFootprintGridSize();
+            FootprintGridSize = CalculateFootprintGridSize();
             
-            SettingsUpdate(RotationDirection.Up);
+            UpdateRotatedSize(RotationDirection.Up);
         }
 
-        public void SettingsUpdate(RotationDirection dir)
+        public void UpdateRotatedSize(RotationDirection dir)
         {
             _rotatedFootprintGridSize = SizePerRotation(dir);
-            Offset = ObjectOffset(dir);
         }
 
-        Vector3 ObjectOffset(RotationDirection dir)
+        public Vector3 ObjectOffset(RotationDirection dir)
         {
             var cellSize = GameWorld.ActiveGridCellSize;
             float height = _startObjectSize.y / 2;
-            float halfX = IsObjectSingleTile ? (float)cellSize / 2 : (float)_footprintGridSize.x / 2 * cellSize;
-            float halfY = IsObjectSingleTile ? (float)cellSize / 2 : (float)_footprintGridSize.y / 2 * cellSize;
+            float halfX = IsObjectSingleTile ? (float)cellSize / 2 : (float)FootprintGridSize.x / 2 * cellSize;
+            float halfY = IsObjectSingleTile ? (float)cellSize / 2 : (float)FootprintGridSize.y / 2 * cellSize;
             const int posDir = 1;
             const int negDir = -1;
             
@@ -54,7 +52,7 @@ namespace ProjectDiorama
         
         Vector2Int SizePerRotation(RotationDirection dir)
         {
-            var startSize = _footprintGridSize;
+            var startSize = FootprintGridSize;
             Vector2Int newSize = dir switch
             {
                 RotationDirection.Up     => startSize,
@@ -68,8 +66,8 @@ namespace ProjectDiorama
         }
 
         public Vector2Int RotatedSize => _rotatedFootprintGridSize;
-        public bool IsObjectSingleTile => _footprintGridSize.x == 1 && _footprintGridSize.y == 1;
-        public bool IsObjectSquare => _footprintGridSize.x == _footprintGridSize.y;
+        public bool IsObjectSingleTile => FootprintGridSize.x == 1 && FootprintGridSize.y == 1;
+        public bool IsObjectSquare => FootprintGridSize.x == FootprintGridSize.y;
         public bool IsObjectVertical => RotatedSize.x < RotatedSize.y;
         public FootprintOrientation FootprintOrientation => IsObjectVertical ? 
             FootprintOrientation.Vertical :

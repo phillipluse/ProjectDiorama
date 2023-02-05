@@ -5,35 +5,65 @@ namespace ProjectDiorama
 {
     public class GridMarkers : MonoBehaviour
     {
-        [SerializeField] GameObject _markerPrefab;
+        [SerializeField] GridMarker _marker;
 
-        GameObject _marker;
-
-        void Awake()
+        void OnEnable()
         {
-            Events.AnyObjectInitializedEvent += OnObjectSelected;
-            Events.AnyObjectSelectedEvent += OnObjectSelected;
-            Events.AnyObjectPlacedEvent += OnObjectPlaced;
+            Events.AnyObjectInitializedEvent += Init;
+            Events.AnyObjectSelectedEvent += Init;
+            Events.AnyObjectPlacedEvent += Release;
+            Events.AnyObjectDeSelectedEvent += Release;
+            Events.AnyObjectDeletedEvent += Release;
         }
 
-        void OnObjectSelected(BaseObject baseObject)
+        void OnDisable()
         {
-            //parent to this base object
-            //Get gridpositions of base object
-            //Add a marker at each position
-            //Show marker
-
-            transform.parent = baseObject.Selectable.GetTransform();
-            transform.localPosition = Vector3.zero;
-            _marker = Instantiate(_markerPrefab, transform, false);
-            // _marker.transform.localPosition = Vector3.zero;
+            Events.AnyObjectInitializedEvent -= Init;
+            Events.AnyObjectSelectedEvent -= Init;
+            Events.AnyObjectPlacedEvent -= Release;
+            Events.AnyObjectDeSelectedEvent -= Release;
+            Events.AnyObjectDeletedEvent -= Release;
         }
 
-        void OnObjectPlaced(BaseObject baseObject)
+        void Init(BaseObject baseObject)
         {
+            var t = transform;
+            var selectableT = baseObject.Selectable.GetTransform();
+            
+            t.parent = selectableT;
+
+            var footPrintSize = baseObject.Selectable.FootprintSize();
+            var yPos = -selectableT.localPosition.y;
+            var pos = new Vector3(-footPrintSize.x / 2, yPos, -footPrintSize.y / 2);
+            var rot = Quaternion.Euler(Vector3.zero);
+            t.SetLocalPositionAndRotation(pos, rot);
+            baseObject.StateChange += OnBaseObjectStateChange;
+            
+            _marker.Init(baseObject);
+            _marker.Show();
+        }
+
+        void Release(BaseObject baseObject)
+        {
+            baseObject.StateChange -= OnBaseObjectStateChange;
             transform.parent = null;
-            _marker.SetActive(false);
+            _marker.Hide();
+            transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
-        
+
+        void OnBaseObjectStateChange(ObjectState state)
+        {
+            switch (state)
+            {
+                case ObjectState.None: _marker.SetNormal(); 
+                    break;
+                case ObjectState.Normal: _marker.SetNormal(); 
+                    break;
+                case ObjectState.Warning: _marker.SetWarning();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
+        }
     }
 }

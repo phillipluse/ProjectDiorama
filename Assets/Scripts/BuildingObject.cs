@@ -12,7 +12,8 @@ namespace ProjectDiorama
 
         BaseObject _baseObject;
         ObjectSettings _settings;
-        Vector3 _targetLocalPosition;
+        Vector3 _tempLocalPosition;
+        Vector3 _placedLocationPosition;
         Vector3 _movingOffset;
         IEnumerator _moveCO;
         bool _isMoveCRRunning;
@@ -27,8 +28,10 @@ namespace ProjectDiorama
             _settings = new ObjectSettings(size);
 
             _movingOffset = new Vector3(0.0f, _moveHeightOffset, 0.0f);
+
+            var offset = _settings.ObjectOffset(RotationDirection.Up);
             
-            MoveTo(_settings.Offset + _movingOffset);
+            MoveTo(offset + _movingOffset);
 
             _visual.Init();
         }
@@ -45,11 +48,17 @@ namespace ProjectDiorama
 
         public void OnSelected()
         {
-            MoveTo(_settings.Offset + _movingOffset);
+            _placedLocationPosition = transform.localPosition;
+            MoveTo( _placedLocationPosition + _movingOffset);
             _visual.OnSelect();
         }
 
-        public void OnDeSelect() { }
+        public void OnDeSelect()
+        {
+            MoveTo(_placedLocationPosition);
+            _settings.UpdateRotatedSize(_baseObject.PlacedRotationDirection);
+            _visual.OnPlaced();
+        }
 
         public void OnPlaced()
         {
@@ -58,7 +67,8 @@ namespace ProjectDiorama
             MoveTo(transform.localPosition - _movingOffset);
             
             if (!_isMoveCRRunning) return;
-            MoveTo(_targetLocalPosition - _movingOffset);
+            
+            MoveTo(_tempLocalPosition - _movingOffset);
             StopCoroutine(_moveCO);
             _isMoveCRRunning = false;
         }
@@ -67,9 +77,10 @@ namespace ProjectDiorama
 
         public void OnRotate(RotationDirection dir)
         {
-            _settings.SettingsUpdate(dir);
+            _settings.UpdateRotatedSize(dir);
+            var offSet = _settings.ObjectOffset(dir);
             
-            _targetLocalPosition = _settings.Offset + _movingOffset;
+            _tempLocalPosition = offSet + _movingOffset;
             if (_isMoveCRRunning) return;
             _moveCO = MoveCO();
             StartCoroutine(_moveCO);
@@ -91,11 +102,11 @@ namespace ProjectDiorama
         {
             _isMoveCRRunning = true;
             
-            while (transform.localPosition != _targetLocalPosition)
+            while (transform.localPosition != _tempLocalPosition)
             {
                 var factor = 20.0f;
                 var newPosition = Vector3.Lerp(transform.localPosition, 
-                    _targetLocalPosition, Time.deltaTime * factor);
+                    _tempLocalPosition, Time.deltaTime * factor);
                 MoveTo(newPosition);
                 yield return null;
             }
@@ -111,5 +122,6 @@ namespace ProjectDiorama
         public ObjectSettings GetSettings() => _settings;
         public Transform GetTransform() => transform;
         public BaseObject GetBaseObject() => _baseObject;
+        public Vector2 FootprintSize() => _settings.FootprintGridSize;
     }
 }

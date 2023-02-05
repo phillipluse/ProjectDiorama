@@ -359,6 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _visual: {fileID: -1072570949740140279}
+  _moveHeightOffset: 0.2
 --- !u!114 &-1072570949740140279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,7 +375,8 @@ MonoBehaviour:
   _meshRenderer: {fileID: 8217597241362573300}
   _outline: {fileID: 5611456984495713236}
   _normalMaterial: {fileID: 2100000, guid: ecc4e406eb17f734c924679b49947d13, type: 2}
-  _warningMaterial: {fileID: 2100000, guid: 09b40e2c590aa6b4cadfa6f5ac1f0b5b, type: 2}
+  _warningMaterial: {fileID: 2100000, guid: d03894ad4bddd484d901defbea276b03, type: 2}
+  _ghostMaterial: {fileID: 2100000, guid: be4c1884bfd37724984e9d8dbe164283, type: 2}
 --- !u!114 &5611456984495713236
 MonoBehaviour:
   m_ObjectHideFlags: 0

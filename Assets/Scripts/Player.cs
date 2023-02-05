@@ -52,11 +52,27 @@ namespace ProjectDiorama
             if (input.IsRotatePressedThisFrame && !_isRotatePressed && HasActiveObject)
             {
                 _isRotatePressed = true;
+                return;
             }
 
             if (input.IsSelectPressedThisFrame && !_isSelectPressed)
             {
                 _isSelectPressed = true;
+                return;
+            }
+
+            if (input.IsEscapePressedThisFrame && HasActiveObject)
+            {
+                _selectedBaseObject.OnDeSelect();
+                _selectedBaseObject = null;
+                return;
+            }
+            
+            if (input.IsDeletePressedThisFrame && HasActiveObject)
+            {
+                _selectedBaseObject.OnDelete();
+                _selectedBaseObject = null;
+                return;
             }
         }
 
@@ -97,7 +113,7 @@ namespace ProjectDiorama
 
         void PlaceObject()
         {
-            if (_selectedBaseObject.TryToPlaceObject(_playerPosition.Position))
+            if (_selectedBaseObject.TryToPlaceObject())
             {
                 _selectedBaseObject = null;
             }
@@ -105,7 +121,9 @@ namespace ProjectDiorama
 
         void CreateObject(GameObject go)
         {
-            var newGo = Instantiate(go, _playerPosition.Position, Quaternion.identity);
+            var spawnHeight = 20.0f;
+            var spawnPosition = new Vector3(_playerPosition.Position.x, spawnHeight, _playerPosition.Position.z);
+            var newGo = Instantiate(go, spawnPosition, Quaternion.identity);
             
             if (newGo.TryGetComponent(out BaseObject baseObject))
             {

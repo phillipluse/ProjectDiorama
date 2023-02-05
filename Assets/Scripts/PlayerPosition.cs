@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ProjectDiorama
@@ -38,7 +37,6 @@ namespace ProjectDiorama
 
             Release();
         }
-
 
         bool IsOverSelectableObject(out ISelectable selectable)
         {

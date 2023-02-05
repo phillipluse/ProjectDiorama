@@ -15,6 +15,8 @@ namespace ProjectDiorama
         InputAction _threeButton;
         InputAction _fourButton;
         InputAction _rotate;
+        InputAction _escape;
+        InputAction _delete;
         
         void Awake()
         {
@@ -25,6 +27,8 @@ namespace ProjectDiorama
             _threeButton = _playerControls.PlayerActions.ThreeButton;
             _fourButton = _playerControls.PlayerActions.FourButton;
             _rotate = _playerControls.PlayerActions.Rotate;
+            _escape = _playerControls.PlayerActions.Escape;
+            _delete = _playerControls.PlayerActions.Delete;
             _playerControls.Enable();
         }
         
@@ -43,6 +47,8 @@ namespace ProjectDiorama
                 IsThreeButtonPressedThisFrame = _threeButton.WasPressedThisFrame(),
                 IsFourButtonPressedThisFrame = _fourButton.WasPressedThisFrame(),
                 IsRotatePressedThisFrame = _rotate.WasPressedThisFrame(),
+                IsEscapePressedThisFrame = _escape.WasPressedThisFrame(),
+                IsDeletePressedThisFrame = _delete.WasPressedThisFrame(),
             };
             
             _player.SetInput(ref frameInput);
@@ -57,5 +63,7 @@ namespace ProjectDiorama
         public bool IsThreeButtonPressedThisFrame;
         public bool IsFourButtonPressedThisFrame;
         public bool IsRotatePressedThisFrame;
+        public bool IsEscapePressedThisFrame;
+        public bool IsDeletePressedThisFrame;
     }
 }

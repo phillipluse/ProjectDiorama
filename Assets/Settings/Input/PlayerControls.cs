@@ -89,6 +89,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""186d17e5-96d2-485d-9a06-cdfc74e3ac04"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Delete"",
+                    ""type"": ""Button"",
+                    ""id"": ""ddad8abe-606b-4dcc-b12d-f084f87316eb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -168,6 +186,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43fafb42-ab8b-4a1a-94ec-d872e12bbc09"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae5b0923-86cc-4245-8fb5-65b89a2d897b"",
+                    ""path"": ""<Keyboard>/delete"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Delete"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,6 +223,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActions_FourButton = m_PlayerActions.FindAction("FourButton", throwIfNotFound: true);
         m_PlayerActions_FiveButton = m_PlayerActions.FindAction("FiveButton", throwIfNotFound: true);
         m_PlayerActions_Rotate = m_PlayerActions.FindAction("Rotate", throwIfNotFound: true);
+        m_PlayerActions_Escape = m_PlayerActions.FindAction("Escape", throwIfNotFound: true);
+        m_PlayerActions_Delete = m_PlayerActions.FindAction("Delete", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,6 +291,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_FourButton;
     private readonly InputAction m_PlayerActions_FiveButton;
     private readonly InputAction m_PlayerActions_Rotate;
+    private readonly InputAction m_PlayerActions_Escape;
+    private readonly InputAction m_PlayerActions_Delete;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -260,6 +304,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @FourButton => m_Wrapper.m_PlayerActions_FourButton;
         public InputAction @FiveButton => m_Wrapper.m_PlayerActions_FiveButton;
         public InputAction @Rotate => m_Wrapper.m_PlayerActions_Rotate;
+        public InputAction @Escape => m_Wrapper.m_PlayerActions_Escape;
+        public InputAction @Delete => m_Wrapper.m_PlayerActions_Delete;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -290,6 +336,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Rotate.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRotate;
                 @Rotate.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRotate;
                 @Rotate.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRotate;
+                @Escape.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnEscape;
+                @Escape.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnEscape;
+                @Escape.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnEscape;
+                @Delete.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDelete;
+                @Delete.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDelete;
+                @Delete.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDelete;
             }
             m_Wrapper.m_PlayerActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -315,6 +367,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Rotate.started += instance.OnRotate;
                 @Rotate.performed += instance.OnRotate;
                 @Rotate.canceled += instance.OnRotate;
+                @Escape.started += instance.OnEscape;
+                @Escape.performed += instance.OnEscape;
+                @Escape.canceled += instance.OnEscape;
+                @Delete.started += instance.OnDelete;
+                @Delete.performed += instance.OnDelete;
+                @Delete.canceled += instance.OnDelete;
             }
         }
     }
@@ -328,5 +386,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFourButton(InputAction.CallbackContext context);
         void OnFiveButton(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
+        void OnDelete(InputAction.CallbackContext context);
     }
 }
