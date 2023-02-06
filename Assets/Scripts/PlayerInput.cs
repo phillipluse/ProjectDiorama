@@ -8,7 +8,6 @@ namespace ProjectDiorama
         [Header("References")]
         [SerializeField] Player _player;
         
-        PlayerControls _playerControls;
         InputAction _select;
         InputAction _oneButton;
         InputAction _twoButton;
@@ -18,18 +17,17 @@ namespace ProjectDiorama
         InputAction _escape;
         InputAction _delete;
         
-        void Awake()
+        void Start()
         {
-            _playerControls = new PlayerControls();
-            _select = _playerControls.PlayerActions.Select;
-            _oneButton = _playerControls.PlayerActions.OneButton;
-            _twoButton = _playerControls.PlayerActions.TwoButton;
-            _threeButton = _playerControls.PlayerActions.ThreeButton;
-            _fourButton = _playerControls.PlayerActions.FourButton;
-            _rotate = _playerControls.PlayerActions.Rotate;
-            _escape = _playerControls.PlayerActions.Escape;
-            _delete = _playerControls.PlayerActions.Delete;
-            _playerControls.Enable();
+            var playerControls = GameWorld.Controls;
+            _select = playerControls.PlayerActions.Select;
+            _oneButton = playerControls.PlayerActions.OneButton;
+            _twoButton = playerControls.PlayerActions.TwoButton;
+            _threeButton = playerControls.PlayerActions.ThreeButton;
+            _fourButton = playerControls.PlayerActions.FourButton;
+            _rotate = playerControls.PlayerActions.Rotate;
+            _escape = playerControls.PlayerActions.Escape;
+            _delete = playerControls.PlayerActions.Delete;
         }
         
         void Update()
@@ -39,7 +37,7 @@ namespace ProjectDiorama
 
         void HandleInput()
         {
-            var frameInput = new FrameInput
+            var frameInput = new PlayerFrameInput
             {
                 IsSelectPressedThisFrame = _select.WasPressedThisFrame(),
                 IsOneButtonPressedThisFrame = _oneButton.WasPressedThisFrame(),
@@ -55,7 +53,7 @@ namespace ProjectDiorama
         }
     }
     
-    public struct FrameInput
+    public struct PlayerFrameInput
     {
         public bool IsSelectPressedThisFrame;
         public bool IsOneButtonPressedThisFrame;

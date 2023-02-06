@@ -23,27 +23,27 @@ namespace ProjectDiorama
             CheckForSelectPress();
         }
 
-        public void SetInput(ref FrameInput input)
+        public void SetInput(ref PlayerFrameInput input)
         {
-            if (input.IsOneButtonPressedThisFrame && !HasActiveObject)
+            if (input.IsOneButtonPressedThisFrame)
             {
                 CreateObject(_tempShortcutObject1);
                 return;
             }
             
-            if (input.IsTwoButtonPressedThisFrame && !HasActiveObject)
+            if (input.IsTwoButtonPressedThisFrame)
             {
                 CreateObject(_tempShortcutObject2);
                 return;
             }            
             
-            if (input.IsThreeButtonPressedThisFrame && !HasActiveObject)
+            if (input.IsThreeButtonPressedThisFrame)
             {
                 CreateObject(_tempShortcutObject3);
                 return;
             }
 
-            if (input.IsFourButtonPressedThisFrame && !HasActiveObject)
+            if (input.IsFourButtonPressedThisFrame)
             {
                 CreateObject(_tempShortcutObject4);
                 return;
@@ -104,11 +104,9 @@ namespace ProjectDiorama
                 return;
             }
 
-            if (_playerPosition.IsOverSelectable)
-            {
-                _selectedBaseObject = _playerPosition.BaseObjectAtPosition;
-                _selectedBaseObject.OnSelected();
-            }
+            if (!_playerPosition.IsOverSelectable) return;
+            _selectedBaseObject = _playerPosition.BaseObjectAtPosition;
+            _selectedBaseObject.OnSelected();
         }
 
         void PlaceObject()
@@ -122,6 +120,13 @@ namespace ProjectDiorama
         void CreateObject(GameObject go)
         {
             var spawnHeight = 20.0f;
+
+            if (HasActiveObject)
+            {
+                spawnHeight = 3.0f;
+                _selectedBaseObject.OnDeSelect();
+            }
+            
             var spawnPosition = new Vector3(_playerPosition.Position.x, spawnHeight, _playerPosition.Position.z);
             var newGo = Instantiate(go, spawnPosition, Quaternion.identity);
             
@@ -133,5 +138,6 @@ namespace ProjectDiorama
         }
 
         public bool HasActiveObject => _selectedBaseObject != null;
+        public Vector2 Position => _playerPosition.Position;
     }
 }

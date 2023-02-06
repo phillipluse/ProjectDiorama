@@ -14,7 +14,7 @@ namespace ProjectDiorama
         
         [Header("Properties")]
         [SerializeField] int _gridWidth;
-        [SerializeField] int _gridLength;
+        [SerializeField] int _gridHeight;
         [SerializeField] int _cellSize = 1;
 
         PlacedGridObjects _placedGridObjects;
@@ -29,17 +29,27 @@ namespace ProjectDiorama
             _emptyGridObject = new GridObject(GridObjectState.Empty);
             _occupiedGridObject = new GridObject(GridObjectState.Occupied);
             _noneGridObject = new GridObject(GridObjectState.None);
-            _grid = new GridXZ<GridObject>(_gridWidth, _gridLength, _cellSize, _emptyGridObject);
+            _grid = new GridXZ<GridObject>(_gridWidth, _gridHeight, _cellSize, _emptyGridObject);
             _placedGridObjects = new PlacedGridObjects();
             _gridCheck = new GridCheck(this);
         }
 
+        /// <summary>
+        /// Determines grid positions of object and marks them as Occupied.
+        /// </summary>
+        /// <param name="worldPosition"></param>
+        /// <param name="settings"></param>
         public void AddObjectToGrid(Vector3 worldPosition, ObjectSettings settings)
         {
             UpdateGridAtPositions(worldPosition, settings, _occupiedGridObject, out var modifiedPositions);
             AddToPlacedGridObjects(modifiedPositions);
         }
 
+        /// <summary>
+        /// Determines grid positions of object and marks them as Empty.
+        /// </summary>
+        /// <param name="worldPosition"></param>
+        /// <param name="settings"></param>
         public void RemoveObjectFromGrid(Vector3 worldPosition, ObjectSettings settings)
         {
             UpdateGridAtPositions(worldPosition, settings, _emptyGridObject, out var modifiedPositions);
@@ -75,7 +85,7 @@ namespace ProjectDiorama
         }
 
         /// <summary>
-        /// 
+        /// Checks grid positions to determine if object can placed placed at position.
         /// </summary>
         /// <param name="worldPosition"></param>
         /// <param name="settings"></param>
@@ -178,6 +188,8 @@ namespace ProjectDiorama
         public int GridObjectCount => _placedGridObjects.Count;
         public List<GridObject> PlacedGridObjects => _placedGridObjects.GridObjects();
         public int CellSize => _cellSize;
+        public int GridWidth => _gridWidth;
+        public int GridHeight => _gridHeight;
 
     }
 }

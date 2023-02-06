@@ -4,7 +4,9 @@ namespace ProjectDiorama
 {
     public class GameWorld : MonoBehaviour
     {
-        static GridHandler GridHandler;
+        public static GridHandler ActiveGrid { get; private set; }
+        public static PlayerControls Controls { get; private set; }
+
         static Player Player;
 
         [SerializeField] GridHandler _gridHandler;
@@ -13,12 +15,14 @@ namespace ProjectDiorama
 
         void Awake()
         {
-            GridHandler = _gridHandler;
+            ActiveGrid = _gridHandler;
             Player = _player;
+            Controls = new PlayerControls();
+            Controls.Enable();
         }
 
-        public static GridHandler ActiveGrid => GridHandler;
-        public static int ActiveGridCellSize => GridHandler.CellSize;
+        public static int ActiveGridCellSize => ActiveGrid.CellSize;
         public static bool IsObjectBeingPlaced => Player.HasActiveObject;
+        public static Vector3 PlayerPosition => Player.Position;
     }
 }

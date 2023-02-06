@@ -19,6 +19,10 @@ namespace ProjectDiorama
 
         const float MAX_DISTANCE = 100.0f;
         
+        /// <summary>
+        /// Returns world position of mouse at camera near clip plane.
+        /// </summary>
+        /// <returns></returns>
         public static Vector3 GetScreenToWorldPoint()
         {
             var mouseScreenPosition = ScreenPosition;
@@ -52,6 +56,24 @@ namespace ProjectDiorama
         {
             var ray = Camera.ScreenPointToRay(ScreenPosition);
             return Physics.Raycast(ray, out RaycastHit newHit, MAX_DISTANCE) ? newHit : new RaycastHit();
+        }
+        
+        public static Vector2 GetScreenSizeInWorldCoords()
+        {
+            var width = 0.0f;
+            var height = 0.0f;
+
+            var clipPlane = Camera.nearClipPlane;
+
+            var p1 = Camera.ViewportToWorldPoint(new Vector3(0, 0, clipPlane));
+            var p2 = Camera.ViewportToWorldPoint(new Vector3(1, 0, clipPlane));
+            var p3 = Camera.ViewportToWorldPoint(new Vector3(1, 1, clipPlane));
+
+            width = (p2 - p1).magnitude;
+            height = (p3 - p2).magnitude;
+
+            Debug.Log($"{width}, {height}");
+            return new Vector2(width, height);
         }
         
         public static Vector2 ScreenPosition => Mouse.current.position.ReadValue();

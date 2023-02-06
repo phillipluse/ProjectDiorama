@@ -79,24 +79,7 @@ namespace ProjectDiorama
         {
             if (_isSelected)
             {
-                _tempRotationDirection = PlacedRotationDirection;
-                _tempGridWorldPosition = _placedGridWorldPosition;
-                var rotation = Quaternion.Euler(0, PlacedRotationDirection.RotationAngle(), 0);
-                transform.SetPositionAndRotation(_placedGridWorldPosition, rotation);
-                
-                if (_isRotateCRRunning)
-                {
-                    StopCoroutine(_rotateCO);
-                    _isRotateCRRunning = false;
-                }
-                
-                foreach (IBaseObjectModule baseObjectModule in _objectModules)
-                {
-                    baseObjectModule.OnDeSelect();
-                }
-                
-                AddToGrid(_placedGridWorldPosition);
-                Events.AnyObjectDeSelected(this);
+                MoveBackToStartPosition();
                 return;
             }
             
@@ -189,6 +172,29 @@ namespace ProjectDiorama
         void RotateTo(Quaternion rotation)
         {
             transform.rotation = rotation;
+        }
+        
+        void MoveBackToStartPosition()
+        {
+            _tempRotationDirection = PlacedRotationDirection;
+            _tempGridWorldPosition = _placedGridWorldPosition;
+            var rotation = Quaternion.Euler(0, PlacedRotationDirection.RotationAngle(), 0);
+            transform.SetPositionAndRotation(_placedGridWorldPosition, rotation);
+
+            if (_isRotateCRRunning)
+            {
+                StopCoroutine(_rotateCO);
+                _isRotateCRRunning = false;
+            }
+
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.OnDeSelect();
+            }
+
+            AddToGrid(_placedGridWorldPosition);
+            Events.AnyObjectDeSelected(this);
+            return;
         }
 
         ISelectable GetSelectable()

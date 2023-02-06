@@ -210,6 +210,162 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""CameraActions"",
+            ""id"": ""0584d5ce-8ab9-46f0-b5d8-f16adcae18a1"",
+            ""actions"": [
+                {
+                    ""name"": ""CameraMovement"",
+                    ""type"": ""Value"",
+                    ""id"": ""135689bc-957e-43ca-ae8c-0c5eefd97ede"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CameraRotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""80b6f09b-d0d7-440c-a4ff-877ef7665a43"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""b4ea0bc0-c771-4d2d-867c-e72bf1a962a0"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": ""Invert,Clamp(min=-1,max=1)"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""4dab2ed3-c46d-462e-b3eb-eaf7ad3a3886"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMovement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8de49ed1-d87d-4fcc-a410-edd609731666"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""92019976-2689-4159-b55a-f78524d004bb"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""f50358ed-3ad4-4a1f-b738-68ce03548a31"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""6a870481-5924-4f3b-81e9-054ebffb4cce"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""0be211ae-0195-485d-ab2b-0f5e0b3d966c"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""6be74f44-7511-4e4d-9b9d-6d95a1b9473d"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""2599e1ea-49bc-423a-a71f-b37598dc7ee2"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""de4703c8-ba0b-4666-9897-0cdb2fdb55e4"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ea8979f3-0eef-4fcd-b3bb-c99b12fab7cb"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ba2ecbb-8083-41c5-ace7-fce222b6089a"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -225,6 +381,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActions_Rotate = m_PlayerActions.FindAction("Rotate", throwIfNotFound: true);
         m_PlayerActions_Escape = m_PlayerActions.FindAction("Escape", throwIfNotFound: true);
         m_PlayerActions_Delete = m_PlayerActions.FindAction("Delete", throwIfNotFound: true);
+        // CameraActions
+        m_CameraActions = asset.FindActionMap("CameraActions", throwIfNotFound: true);
+        m_CameraActions_CameraMovement = m_CameraActions.FindAction("CameraMovement", throwIfNotFound: true);
+        m_CameraActions_CameraRotation = m_CameraActions.FindAction("CameraRotation", throwIfNotFound: true);
+        m_CameraActions_Scroll = m_CameraActions.FindAction("Scroll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -377,6 +538,55 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public PlayerActionsActions @PlayerActions => new PlayerActionsActions(this);
+
+    // CameraActions
+    private readonly InputActionMap m_CameraActions;
+    private ICameraActionsActions m_CameraActionsActionsCallbackInterface;
+    private readonly InputAction m_CameraActions_CameraMovement;
+    private readonly InputAction m_CameraActions_CameraRotation;
+    private readonly InputAction m_CameraActions_Scroll;
+    public struct CameraActionsActions
+    {
+        private @PlayerControls m_Wrapper;
+        public CameraActionsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @CameraMovement => m_Wrapper.m_CameraActions_CameraMovement;
+        public InputAction @CameraRotation => m_Wrapper.m_CameraActions_CameraRotation;
+        public InputAction @Scroll => m_Wrapper.m_CameraActions_Scroll;
+        public InputActionMap Get() { return m_Wrapper.m_CameraActions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraActionsActions set) { return set.Get(); }
+        public void SetCallbacks(ICameraActionsActions instance)
+        {
+            if (m_Wrapper.m_CameraActionsActionsCallbackInterface != null)
+            {
+                @CameraMovement.started -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnCameraMovement;
+                @CameraMovement.performed -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnCameraMovement;
+                @CameraMovement.canceled -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnCameraMovement;
+                @CameraRotation.started -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnCameraRotation;
+                @CameraRotation.performed -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnCameraRotation;
+                @CameraRotation.canceled -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnCameraRotation;
+                @Scroll.started -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScroll;
+            }
+            m_Wrapper.m_CameraActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @CameraMovement.started += instance.OnCameraMovement;
+                @CameraMovement.performed += instance.OnCameraMovement;
+                @CameraMovement.canceled += instance.OnCameraMovement;
+                @CameraRotation.started += instance.OnCameraRotation;
+                @CameraRotation.performed += instance.OnCameraRotation;
+                @CameraRotation.canceled += instance.OnCameraRotation;
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
+            }
+        }
+    }
+    public CameraActionsActions @CameraActions => new CameraActionsActions(this);
     public interface IPlayerActionsActions
     {
         void OnSelect(InputAction.CallbackContext context);
@@ -388,5 +598,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnRotate(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnDelete(InputAction.CallbackContext context);
+    }
+    public interface ICameraActionsActions
+    {
+        void OnCameraMovement(InputAction.CallbackContext context);
+        void OnCameraRotation(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
     }
 }
