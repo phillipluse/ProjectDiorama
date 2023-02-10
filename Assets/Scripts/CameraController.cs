@@ -6,18 +6,21 @@ namespace ProjectDiorama
 {
     public class CameraController : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] CameraTarget _cameraTarget;
+        [Header("References")] [SerializeField]
+        CameraTarget _cameraTarget;
+
         [SerializeField] CinemachineVirtualCamera _virtualCamera;
 
-        [Header("Elevation Properties")]
-        [SerializeField][Range(11,20)] float _maxElevation;
-        [SerializeField][Range(0,10)] float  _minElevation;
+        [Header("Elevation Properties")] [SerializeField] [Range(11, 20)]
+        float _maxElevation;
+
+        [SerializeField] [Range(0, 10)] float _minElevation;
         [SerializeField] float _elevationChangeSpeed;
         [SerializeField] float _elevationSmoothTime;
 
-        [Header("Zoom Properties")]
-        [SerializeField] float _maxZoom;
+        [Header("Zoom Properties")] [SerializeField]
+        float _maxZoom;
+
         [SerializeField] float _minZoom;
         [SerializeField] float _zoomMaxSpeed;
         [SerializeField] float _zoomSmoothTime;
@@ -28,6 +31,13 @@ namespace ProjectDiorama
         float _elevationChangeAdd;
         float _zoomVelocity;
         float _zoomAmountAdd;
+
+        float _fovToAdd;
+        float _fovVelocity;
+
+        float _deltaLength;
+        Vector3 _newLength;
+        float _deltaLengthVelocity;
 
         void Awake()
         {
@@ -41,78 +51,98 @@ namespace ProjectDiorama
 
         public void SetInput(ref CameraFrameInput input)
         {
-           // _cameraTarget.Move(input.PanMovement);
-           _cameraTarget.RotateYAxis(input.RotationMovement.x);
-           ElevationChange(input.RotationMovement.y);
-           Zoom(input.ScrollValue);
+            // _cameraTarget.Move(input.PanMovement);
+            _cameraTarget.RotateYAxis(input.RotationMovement.x);
+            ElevationChange(input.RotationMovement.y);
+            Zoom(input.ScrollValue);
         }
 
         void ElevationChange(float direction)
         {
             var adjustedSpeed = _elevationChangeSpeed * direction;
-            _elevationChangeAdd = Mathf.SmoothDamp(_elevationChangeAdd, adjustedSpeed, 
+            _elevationChangeAdd = Mathf.SmoothDamp(_elevationChangeAdd, adjustedSpeed,
                 ref _elevationChangeVelocity, _elevationSmoothTime);
-            
+
             var currentElevation = _transposer.m_FollowOffset.y;
             var newElevation = currentElevation + _elevationChangeAdd;
             newElevation = Mathf.Clamp(newElevation, _minElevation, _maxElevation);
-            
+
             _transposer.m_FollowOffset.y = newElevation;
         }
 
         void Zoom(float scrollValue)
         {
-            // var adjustedSpeed = _zoomMaxSpeed * scrollValue;
-            // _zoomAmountAdd = Mathf.SmoothDamp(_zoomAmountAdd, adjustedSpeed, ref _zoomVelocity, _zoomSmoothTime);
-            // Debug.Log($"{_zoomAmountAdd}");
-            // var currentZoomAmount = _virtualCamera.m_Lens.FieldOfView;
-            // var newZoomAmount = currentZoomAmount + _zoomAmountAdd;
-            // newZoomAmount = Mathf.Clamp(newZoomAmount, _minZoom, _maxZoom);
-
-
-            // if (Mathf.Abs(_zoomAmountAdd) <= 0.00001f) return;
-            if (scrollValue == 0) return;
-
-            var isZoomIn = Mathf.Sign(scrollValue) == -1;
-            var fov = _virtualCamera.m_Lens.FieldOfView;
-            var scaleFactor = _scaleFactor;
-            Debug.Log($"Scale Factor: {scaleFactor}");
-
-            var playerPosition = GameWorld.PlayerPosition;
-            Debug.Log($"Player Position: {playerPosition}");
+            var newFOV = GetFOV(scrollValue);
             
-            var currentLength = _cameraTarget.transform.position - playerPosition;
-            Debug.Log($"Old Length2: {currentLength}");
-
-            var newFOV = 0.0f;
-            Vector3 newLength;
-            if (isZoomIn)
+            if (Mathf.Abs(_fovToAdd) < 0.0001f)
             {
-                newLength = currentLength / (scaleFactor);
-                newFOV = fov /= scaleFactor;
+                _fovToAdd = 0.0f;
+                _fovVelocity = 0.0f;
+                _deltaLength = 0.0f;
+                _deltaLengthVelocity = 0.0f;
+                return;
+            }
+            
+            newFOV = Mathf.Clamp(newFOV, _minZoom, _maxZoom);
+            
+            if (IsAtFOVBoundary(newFOV)) return;
+
+            var newPosition = GetPositionTowardsZoomPoint(scrollValue);
+            _cameraTarget.transform.position = newPosition;
+            _virtualCamera.m_Lens.FieldOfView = newFOV;
+        }
+
+        float GetFOV(float scrollValue)
+        {
+            var isZoomInInput = Mathf.Sign(scrollValue) == -1;
+            var fov = _virtualCamera.m_Lens.FieldOfView;
+            float tempFOV;
+            
+            if (isZoomInInput) tempFOV = fov / _scaleFactor;
+            else tempFOV = fov * _scaleFactor;
+            
+            var adjustedTargetAdd = Mathf.Abs(fov - tempFOV) * scrollValue;
+            _fovToAdd = Mathf.SmoothDamp(_fovToAdd, adjustedTargetAdd, ref _fovVelocity, _zoomSmoothTime);
+            return fov + _fovToAdd;
+        }
+
+        Vector3 GetPositionTowardsZoomPoint(float scrollValue)
+        {
+            var playerPosition = GameWorld.PlayerPosition;
+            var currentLength = _cameraTarget.transform.position - playerPosition;
+
+            Vector3 newLength;
+            Vector3 targetPosition;
+
+            if (IsZoomingIn())
+            {
+                newLength = currentLength / _scaleFactor;
+                targetPosition = playerPosition + newLength;
             }
             else
             {
-                newLength = currentLength * scaleFactor;
-                newFOV = fov *= scaleFactor;
-            }
-            Debug.Log($"New Length: {newLength}");
-
-            newFOV = Mathf.Clamp(newFOV, _minZoom, _maxZoom);
-
-            var deltaLength = 0.0f;
-            if (newFOV != _minZoom && newFOV != _maxZoom && isZoomIn)
-            {
-                deltaLength = Vector3.Distance(currentLength,newLength);
+                newLength = currentLength * _scaleFactor;
+                targetPosition = playerPosition + newLength;
             }
             
-            Debug.Log($"Delta: {deltaLength}");
-            
-            var v = Vector3.MoveTowards(_cameraTarget.transform.position, playerPosition, deltaLength);
-            Debug.Log($"New Position: {v}");
-            _cameraTarget.transform.position = v;
+            var adjustedDeltaLengthTarget = Mathf.Abs(Vector3.Distance(currentLength, newLength) * scrollValue);
 
-            _virtualCamera.m_Lens.FieldOfView = newFOV;
+            _deltaLength = Mathf.SmoothDamp(_deltaLength, adjustedDeltaLengthTarget, ref _deltaLengthVelocity,
+                _zoomSmoothTime);
+            
+            var newPosition = Vector3.MoveTowards(_cameraTarget.transform.position, targetPosition, _deltaLength);
+            newPosition.y = 0.0f;
+            return newPosition;
+        }
+
+        bool IsZoomingIn()
+        {
+            return Mathf.Sign(_fovToAdd) == -1;
+        }
+
+        bool IsAtFOVBoundary(float newFOV)
+        {
+            return newFOV == _minZoom || newFOV == _maxZoom;
         }
 
         void OnObjectSelected(BaseObject baseObject)
