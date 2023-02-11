@@ -22,7 +22,7 @@ namespace ProjectDiorama
             playerControls.CameraActions.Enable();
         }
 
-        void Update()
+        void LateUpdate()
         {
             HandleInput();
         }
