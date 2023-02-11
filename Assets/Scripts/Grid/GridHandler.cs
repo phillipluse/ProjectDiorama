@@ -32,6 +32,7 @@ namespace ProjectDiorama
             _grid = new GridXZ<GridObject>(_gridWidth, _gridHeight, _cellSize, _emptyGridObject);
             _placedGridObjects = new PlacedGridObjects();
             _gridCheck = new GridCheck(this);
+            GameWorld.RegisterGrid(this);
         }
 
         /// <summary>

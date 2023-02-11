@@ -9,20 +9,24 @@ namespace ProjectDiorama
 
         static Player Player;
 
-        [SerializeField] GridHandler _gridHandler;
         [SerializeField] Player _player;
         
 
         void Awake()
         {
-            ActiveGrid = _gridHandler;
             Player = _player;
             Controls = new PlayerControls();
             Controls.Enable();
         }
 
+        public static void RegisterGrid(GridHandler handler)
+        {
+            ActiveGrid = handler;
+        }
+
         public static int ActiveGridCellSize => ActiveGrid.CellSize;
         public static bool IsObjectBeingPlaced => Player.HasActiveObject;
         public static Vector3 PlayerPosition => Player.Position;
+        public static bool IsPlayerOnGrid => Player.IsPlayerOverGrid;
     }
 }

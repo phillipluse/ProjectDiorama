@@ -138,6 +138,7 @@ namespace ProjectDiorama
         }
 
         public bool HasActiveObject => _selectedBaseObject != null;
+        public bool IsPlayerOverGrid => _playerPosition.IsPlayerOnGrid;
         public Vector3 Position => _playerPosition.Position;
     }
 }

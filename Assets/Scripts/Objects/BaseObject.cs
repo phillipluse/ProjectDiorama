@@ -124,7 +124,7 @@ namespace ProjectDiorama
             }
             
             const float factor = 20.0f;
-            var newPosition = Vector3.Lerp(transform.position, 
+            var newPosition = Vector3.Slerp(transform.position, 
                 _tempGridWorldPosition, Time.deltaTime * factor);
             
             MoveTo(newPosition);
@@ -153,7 +153,7 @@ namespace ProjectDiorama
             while (transform.rotation.eulerAngles.y != _targetRotation.eulerAngles.y)
             {
                 const float factor = 20.0f;
-                var newRotation = Quaternion.Lerp(transform.rotation, 
+                var newRotation = Quaternion.Slerp(transform.rotation, 
                     _targetRotation, Time.deltaTime * factor);
                 
                 RotateTo(newRotation);
@@ -229,12 +229,12 @@ namespace ProjectDiorama
             return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, Selectable.GetSettings());
         }
 
-        bool IsOnGrid(Vector3 position)
+        static bool IsOnGrid(Vector3 position)
         {
             return GameWorld.ActiveGrid.IsPositionOnGrid(position);
         }
 
-        Vector3 GetGridWorldPosition(Vector3 position)
+        static Vector3 GetGridWorldPosition(Vector3 position)
         {
             return GameWorld.ActiveGrid.GetGridWorldPosition(position);
         }

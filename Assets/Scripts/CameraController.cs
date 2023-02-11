@@ -91,6 +91,8 @@ namespace ProjectDiorama
                 return;
             }
             
+            const float tolerance = 0.0001f;
+            
             //directions switch?
             if (scrollInput != 0.0f)
             {
@@ -100,43 +102,33 @@ namespace ProjectDiorama
                 }
             }
             
-            const float tolerance = 0.0001f;
+            if (!CameraZoom(scrollInput, tolerance)) return;
+
+           
+            CameraTargetMove(scrollInput, tolerance);
+        }
+
+        bool CameraZoom(float scrollInput, float tolerance)
+        {
             var currentFOV = _virtualCamera.m_Lens.FieldOfView;
             _fovToAdd = GetFOVToAdd(scrollInput, currentFOV);
 
             if (_fovToAdd.Abs() < tolerance)
             {
                 ResetZoomParameters();
-                return;
+                return false;
             }
-            
+
             var newFOV = currentFOV + _fovToAdd;
             newFOV = newFOV.Clamp(_minZoom, _maxZoom);
             if (IsAtFOVBoundary(newFOV))
             {
                 ResetZoomParameters();
-                return;
+                return false;
             }
 
             _virtualCamera.m_Lens.FieldOfView = newFOV;
-
-            if (_cameraTarget.IsPanning)
-            {
-                _deltaLength = 0.0f;
-                _deltaLengthVelocity = 0.0f;
-                return;
-            }
-            
-            var newPosition = GetPositionTowardsZoomPoint(scrollInput);
-
-            if (_deltaLength.Abs() < tolerance)
-            {
-                _deltaLength = 0.0f;
-                _deltaLengthVelocity = 0.0f;
-                return;
-            }
-            
-            _cameraTarget.MoveTo(newPosition);
+            return true;
         }
 
         float GetFOVToAdd(float scrollInput, float currentFOV)
@@ -151,6 +143,36 @@ namespace ProjectDiorama
             var adjustedTargetAdd = deltaFOV.Abs() * scrollInput;
             
             return Mathf.SmoothDamp(_fovToAdd, adjustedTargetAdd, ref _fovVelocity, _zoomSmoothTime);
+        }
+
+        void CameraTargetMove(float scrollInput, float tolerance)
+        {
+            //if player not on grid, don't move target
+
+            if (!GameWorld.IsPlayerOnGrid)
+            {
+                _deltaLength = 0.0f;
+                _deltaLengthVelocity = 0.0f;
+                return;
+            }
+            
+            if (_cameraTarget.IsPanning)
+            {
+                _deltaLength = 0.0f;
+                _deltaLengthVelocity = 0.0f;
+                return;
+            }
+
+            var newPosition = GetPositionTowardsZoomPoint(scrollInput);
+
+            if (_deltaLength.Abs() < tolerance)
+            {
+                _deltaLength = 0.0f;
+                _deltaLengthVelocity = 0.0f;
+                return;
+            }
+
+            _cameraTarget.MoveTo(newPosition);
         }
 
         Vector3 GetPositionTowardsZoomPoint(float scrollInput)

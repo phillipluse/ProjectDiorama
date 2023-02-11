@@ -105,7 +105,7 @@ namespace ProjectDiorama
             while (transform.localPosition != _tempLocalPosition)
             {
                 var factor = 20.0f;
-                var newPosition = Vector3.Lerp(transform.localPosition, 
+                var newPosition = Vector3.Slerp(transform.localPosition, 
                     _tempLocalPosition, Time.deltaTime * factor);
                 MoveTo(newPosition);
                 yield return null;

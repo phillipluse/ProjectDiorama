@@ -27,7 +27,6 @@ namespace ProjectDiorama
         {
             var mouseScreenPosition = ScreenPosition;
             var v = new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, Camera.nearClipPlane);
-            Debug.Log($"Mouse Position: {v}");
             return Camera.ScreenToWorldPoint(v);
         }
         

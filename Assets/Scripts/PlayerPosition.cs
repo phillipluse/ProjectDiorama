@@ -8,10 +8,8 @@ namespace ProjectDiorama
         [SerializeField] LayerMask _gridLayerMask;
         [SerializeField] LayerMask _objectLayerMask;
 
-        BaseObject _baseObjectAtPosition;
-        bool _isPlayerOverGrid;
-        
         RaycastHit _hit;
+        public bool IsPlayerOnGrid { get; private set; }
 
         void OnEnable()
         {
@@ -20,7 +18,7 @@ namespace ProjectDiorama
 
         public void Tick()
         {
-            _isPlayerOverGrid = MousePosition.IsPositionOverLayerMask(_gridLayerMask, out _hit);
+            IsPlayerOnGrid = MousePosition.IsPositionOverLayerMask(_gridLayerMask, out _hit);
 
             if (GameWorld.IsObjectBeingPlaced) return;
             CheckIfOverSelectableObject();
@@ -69,25 +67,26 @@ namespace ProjectDiorama
 
         void ChangeBaseObject(BaseObject baseObject)
         {
-            if (_baseObjectAtPosition == baseObject) return;
-            if (_baseObjectAtPosition)
+            if (BaseObjectAtPosition == baseObject) return;
+            if (BaseObjectAtPosition)
             {
-                _baseObjectAtPosition.OnHoverExit();
+                BaseObjectAtPosition.OnHoverExit();
             }
             
-            _baseObjectAtPosition = baseObject;
+            BaseObjectAtPosition = baseObject;
             baseObject.OnHoverEnter();
         }
 
         void Release()
         {
-            if (!_baseObjectAtPosition) return;
-            _baseObjectAtPosition.OnHoverExit();
-            _baseObjectAtPosition = null;
+            if (!BaseObjectAtPosition) return;
+            BaseObjectAtPosition.OnHoverExit();
+            BaseObjectAtPosition = null;
         }
 
-        public BaseObject BaseObjectAtPosition => _baseObjectAtPosition;
-        public Vector3 Position => _isPlayerOverGrid ? _hit.point : Vector3.zero;
-        public bool IsOverSelectable => _baseObjectAtPosition != null;
+        public BaseObject BaseObjectAtPosition { get; private set; }
+
+        public Vector3 Position => IsPlayerOnGrid ? _hit.point : MousePosition.GetScreenToWorldPoint();
+        public bool IsOverSelectable => BaseObjectAtPosition != null;
     }
 }
