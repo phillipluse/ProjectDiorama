@@ -6,15 +6,27 @@ namespace ProjectDiorama
     {
         [Header("References")]
         [SerializeField] PlayerPosition _playerPosition;
-        [SerializeField] GameObject _tempShortcutObject1;
-        [SerializeField] GameObject _tempShortcutObject2;
-        [SerializeField] GameObject _tempShortcutObject3;
-        [SerializeField] GameObject _tempShortcutObject4;
 
+        PlayerObjectSelectShortcuts _shortcuts;
         BaseObject _selectedBaseObject;
         bool _isSelectPressed;
         bool _isRotatePressed;
-        
+
+        void OnEnable()
+        {
+            Events.CreateObjectEvent += CreateObject;
+        }
+
+        void OnDisable()
+        {
+            Events.CreateObjectEvent -= CreateObject;
+        }
+
+        void Awake()
+        {
+            _shortcuts = new PlayerObjectSelectShortcuts(this);
+        }
+
         void Update()
         {
             _playerPosition.Tick();
@@ -25,29 +37,7 @@ namespace ProjectDiorama
 
         public void SetInput(ref PlayerFrameInput input)
         {
-            if (input.IsOneButtonPressedThisFrame)
-            {
-                CreateObject(_tempShortcutObject1);
-                return;
-            }
-            
-            if (input.IsTwoButtonPressedThisFrame)
-            {
-                CreateObject(_tempShortcutObject2);
-                return;
-            }            
-            
-            if (input.IsThreeButtonPressedThisFrame)
-            {
-                CreateObject(_tempShortcutObject3);
-                return;
-            }
-
-            if (input.IsFourButtonPressedThisFrame)
-            {
-                CreateObject(_tempShortcutObject4);
-                return;
-            }
+            _shortcuts.SetInput(ref input);
 
             if (input.IsRotatePressedThisFrame && !_isRotatePressed && HasActiveObject)
             {
@@ -73,6 +63,26 @@ namespace ProjectDiorama
                 _selectedBaseObject.OnDelete();
                 _selectedBaseObject = null;
                 return;
+            }
+        }
+
+        public void CreateObject(GameObject go)
+        {
+            var spawnHeight = 20.0f;
+
+            if (HasActiveObject)
+            {
+                spawnHeight = 3.0f;
+                _selectedBaseObject.OnDeSelect();
+            }
+            
+            var spawnPosition = new Vector3(_playerPosition.Position.x, spawnHeight, _playerPosition.Position.z);
+            var newGo = Instantiate(go, spawnPosition, Quaternion.identity);
+            
+            if (newGo.TryGetComponent(out BaseObject baseObject))
+            {
+                _selectedBaseObject = baseObject;
+                baseObject.Init(_playerPosition.Position);
             }
         }
 
@@ -114,26 +124,6 @@ namespace ProjectDiorama
             if (_selectedBaseObject.TryToPlaceObject())
             {
                 _selectedBaseObject = null;
-            }
-        }
-
-        void CreateObject(GameObject go)
-        {
-            var spawnHeight = 20.0f;
-
-            if (HasActiveObject)
-            {
-                spawnHeight = 3.0f;
-                _selectedBaseObject.OnDeSelect();
-            }
-            
-            var spawnPosition = new Vector3(_playerPosition.Position.x, spawnHeight, _playerPosition.Position.z);
-            var newGo = Instantiate(go, spawnPosition, Quaternion.identity);
-            
-            if (newGo.TryGetComponent(out BaseObject baseObject))
-            {
-                _selectedBaseObject = baseObject;
-                baseObject.Init(_playerPosition.Position);
             }
         }
 

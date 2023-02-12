@@ -124,7 +124,7 @@ namespace ProjectDiorama
             }
             
             const float factor = 20.0f;
-            var newPosition = Vector3.Slerp(transform.position, 
+            var newPosition = Vector3.Lerp(transform.position, 
                 _tempGridWorldPosition, Time.deltaTime * factor);
             
             MoveTo(newPosition);
@@ -194,7 +194,6 @@ namespace ProjectDiorama
 
             AddToGrid(_placedGridWorldPosition);
             Events.AnyObjectDeSelected(this);
-            return;
         }
 
         ISelectable GetSelectable()

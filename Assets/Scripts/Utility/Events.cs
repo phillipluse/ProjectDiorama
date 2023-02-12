@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace ProjectDiorama
 {
@@ -9,6 +10,8 @@ namespace ProjectDiorama
         public static Action<BaseObject> AnyObjectPlacedEvent;
         public static Action<BaseObject> AnyObjectDeSelectedEvent;
         public static Action<BaseObject> AnyObjectDeletedEvent;
+        public static Action<GameObject> CreateObjectEvent;
+        public static Action<ObjectButtonBar> ObjectButtonBarCreatedEvent;
         
         public static void AnyObjectSelected(BaseObject baseObject)
         {
@@ -33,6 +36,16 @@ namespace ProjectDiorama
         public static void AnyObjectDeleted(BaseObject baseObject)
         {
             AnyObjectDeletedEvent?.Invoke(baseObject);
+        }
+
+        public static void CreateObject(GameObject gameObject)
+        {
+            CreateObjectEvent?.Invoke(gameObject);
+        }
+
+        public static void ObjectButtonBarCreated(ObjectButtonBar bar)
+        {
+            ObjectButtonBarCreatedEvent?.Invoke(bar);
         }
     }
 }

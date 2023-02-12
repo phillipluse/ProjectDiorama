@@ -11,6 +11,7 @@ namespace ProjectDiorama
 
         [Header("References")]
         [SerializeField] Logger _logger;
+        [SerializeField] GridCanvas _visual;
         
         [Header("Properties")]
         [SerializeField] int _gridWidth;
@@ -151,6 +152,12 @@ namespace ProjectDiorama
             return _grid.IsValidGridPosition(worldPosition);
         }
 
+        public void ShowVisual() => _visual.Show();
+
+        public void HideVisual() =>  _visual.Hide();
+
+        public bool IsVisualOn() => _visual.IsVisible;
+
         List<GridPositionXZ> RemovePositionsNotOnGrid(List<GridPositionXZ> neighborPositions)
         {
             for (int i = neighborPositions.Count - 1; i >= 0; i--)
@@ -191,6 +198,5 @@ namespace ProjectDiorama
         public int CellSize => _cellSize;
         public int GridWidth => _gridWidth;
         public int GridHeight => _gridHeight;
-
     }
 }

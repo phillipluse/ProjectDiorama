@@ -26,7 +26,10 @@ namespace ProjectDiorama
 
         public static int ActiveGridCellSize => ActiveGrid.CellSize;
         public static bool IsObjectBeingPlaced => Player.HasActiveObject;
-        public static Vector3 PlayerPosition => Player.Position;
         public static bool IsPlayerOnGrid => Player.IsPlayerOverGrid;
+        public static bool IsGridVisible => ActiveGrid.IsVisualOn();
+        public static Vector3 PlayerPosition => Player.Position;
+        public static void ShowGrid() => ActiveGrid.ShowVisual();
+        public static void HideGrid() => ActiveGrid.HideVisual();
     }
 }

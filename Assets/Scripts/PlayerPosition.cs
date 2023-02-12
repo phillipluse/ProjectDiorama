@@ -26,7 +26,7 @@ namespace ProjectDiorama
 
         void CheckIfOverSelectableObject()
         {
-            if (IsOverSelectableObject(out ISelectable selectable))
+            if (IsOverSelectableObject(out ISelectable selectable) && !MousePosition.IsOverUI())
             {
                 var baseObject = selectable.GetBaseObject();
                 ChangeBaseObject(baseObject);
