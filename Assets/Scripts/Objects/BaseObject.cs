@@ -117,15 +117,22 @@ namespace ProjectDiorama
 
         public void Move(Vector3 position)
         {
+            Vector3 newPosition;
+            const float factor = 20.0f;
+            
             if (IsOnGrid(position))
             {
                 _tempGridWorldPosition = GetGridWorldPosition(position);
                 SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
+               newPosition = Vector3.Lerp(transform.position, 
+                    _tempGridWorldPosition, Time.deltaTime * factor);
             }
-            
-            const float factor = 20.0f;
-            var newPosition = Vector3.Lerp(transform.position, 
-                _tempGridWorldPosition, Time.deltaTime * factor);
+            else
+            {
+                _tempGridWorldPosition = position;
+                SetState(ObjectState.Warning);
+                newPosition = position;
+            }
             
             MoveTo(newPosition);
         }

@@ -6,6 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/PersistantScene.unity
+    guid: 0ecf8517fef507d459a83fc6c58c3212
+  - enabled: 1
+    path: Assets/Scenes/TitleScreen.unity
+    guid: aea8f391cc62e0f48bd660f75dff2f05
+  - enabled: 1
     path: Assets/Scenes/Core.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/GrayboxLevel.unity
+    guid: 0f6de983efa904540a140c6b8e840733
+  - enabled: 1
+    path: Assets/Scenes/UI_PlacementButtons.unity
+    guid: 0fdce9d81067d2c4da5fcfef028c3168
+  - enabled: 1
+    path: Assets/Scenes/UI_GrayBox.unity
+    guid: d9d8167b31a58bf42b4d5f22a132d18d
   m_configObjects: {}

@@ -91,9 +91,9 @@ MonoBehaviour:
   - {fileID: 849379129802519247}
   - {fileID: -7893295128165547882}
   - {fileID: -7011558710299706105}
-  - {fileID: 5726107777184786557}
   - {fileID: 8009614409026602453}
   - {fileID: 6559287571998564187}
+  - {fileID: 5726107777184786557}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -158,7 +158,7 @@ MonoBehaviour:
     m_Value: 0.05
   intensity:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 1
   useMultiBounce:
     m_OverrideState: 0
     m_Value: 0
@@ -224,13 +224,13 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.89630586, y: 0.93318665, z: 1, w: 0}
+    m_Value: {x: 0.87948096, y: 0.9005911, z: 1, w: -0.09615385}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 0.9586597, y: 1, z: 0.94878894, w: 0}
+    m_Value: {x: 0.9735328, y: 0.98037267, z: 1, w: -0.0841347}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 0.99909943, y: 1, z: 0.8634107, w: 0}
+    m_Value: {x: 1, y: 0.98934484, z: 0.88380843, w: -0.012019228}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -255,10 +255,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 221518ef91623a7438a71fef23660601, type: 3}
   m_Name: WhiteBalance
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: 7.6
+    m_Value: 28.8
   tint:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.1

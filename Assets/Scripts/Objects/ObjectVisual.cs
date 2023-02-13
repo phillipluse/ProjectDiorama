@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace ProjectDiorama
 {
@@ -42,6 +43,7 @@ namespace ProjectDiorama
         public void SetToNormal()
         {
             SetMaterial(_normalMaterial);
+            ShadowOn();
         }
 
         public void SetToWarning()
@@ -52,11 +54,22 @@ namespace ProjectDiorama
         public void SetToGhost()
         {
             SetMaterial(_ghostMaterial);
+            ShadowOff();
         }
 
         void SetMaterial(Material material)
         {
             _meshRenderer.material = material;
+        }
+
+        void ShadowOn()
+        {
+            _meshRenderer.shadowCastingMode = ShadowCastingMode.On;
+        }
+
+        void ShadowOff()
+        {
+            _meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
         }
     }
 }

@@ -37,7 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - GroundPlane
   - Grid Surface
   m_SortingLayers:
   - name: Default
