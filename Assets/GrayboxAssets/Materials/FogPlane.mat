@@ -88,8 +88,8 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
-    - _CameraDistanceFadeClose: 0
-    - _CameraDistanceFadeFar: 4.39
+    - _CameraDistanceFadeClose: 8.24
+    - _CameraDistanceFadeFar: 5
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -114,8 +114,8 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _UvFadeX: 2
-    - _UvFadeY: 2
+    - _UvFadeX: 1
+    - _UvFadeY: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:

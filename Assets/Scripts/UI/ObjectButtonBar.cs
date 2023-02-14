@@ -19,21 +19,23 @@ namespace ProjectDiorama
 
         void GenerateButtons()
         {
+            int shortCutNumber = 0;
             foreach (var o in _objects)
             {
                 var go = Instantiate(_buttonPrefab, transform);
                 if (go.TryGetComponent(out ObjectButton button))
                 {
-                    button.Init(o);
+                    shortCutNumber++;
+                    button.Init(o, shortCutNumber);
                 }
             }
         }
 
         public bool TryGetObject(out GameObject go, int position)
         {
-            if (_objects.Count >= position + 1)
+            if (_objects.Count >= position)
             {
-                go = _objects[position].Prefab;
+                go = _objects[position - 1].Prefab;
                 return true;
             }
 

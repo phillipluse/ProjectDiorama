@@ -42,20 +42,24 @@ namespace ProjectDiorama
         public void LoadGame()
         {
             _loadingScreen.SetActive(true);
-            
-            SceneManager.UnloadSceneAsync((int)SceneIndex.Title);
-            LoadSceneAsync(SceneIndex.Core);
-            LoadSceneAsync(SceneIndex.GrayBoxLevel);
-            LoadSceneAsync(SceneIndex.UIBuildButtons);
-            LoadSceneAsync(SceneIndex.UIGrayBox);
+
+            AddToList(UnLoadSceneAsync(SceneIndex.Title));
+            AddToList(LoadSceneAsync(SceneIndex.Core));
+            AddToList(LoadSceneAsync(SceneIndex.GrayBoxLevel));
+            AddToList(LoadSceneAsync(SceneIndex.UIBuildButtons));
+            AddToList(LoadSceneAsync(SceneIndex.UIGrayBox));
 
             StartCoroutine(GetSceneLoadProgress());
         }
 
-        void LoadSceneAsync(SceneIndex sceneIndex)
+        AsyncOperation LoadSceneAsync(SceneIndex sceneIndex)
         {
-            var operation = SceneManager.LoadSceneAsync((int) sceneIndex, LoadSceneMode.Additive);
-            AddToList(operation);
+            return SceneManager.LoadSceneAsync((int) sceneIndex, LoadSceneMode.Additive);
+        }
+
+        AsyncOperation UnLoadSceneAsync(SceneIndex sceneIndex)
+        {
+            return SceneManager.UnloadSceneAsync((int) sceneIndex);
         }
 
         IEnumerator GetSceneLoadProgress()
@@ -68,6 +72,7 @@ namespace ProjectDiorama
                 }
             }
 
+            yield return null;
             _loadingScreen.SetActive(false);
         }
 

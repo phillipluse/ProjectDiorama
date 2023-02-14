@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CubeLarge
   m_EditorClassIdentifier: 
   _prefab: {fileID: 3593782204050520251, guid: 328cda2e1d42b58498b4e5c7e2fc8c33, type: 3}
-  _icon: {fileID: 21300000, guid: 2a21135ca3ec18d46bfd5a08456987b5, type: 3}
+  _icon: {fileID: 21300000, guid: 5d05a77f7460f0f45b526f9ef3f8da55, type: 3}

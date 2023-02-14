@@ -82,6 +82,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SixButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""b82976f4-a10e-4e3e-94dc-9dc55ed5b088"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Rotate"",
                     ""type"": ""Button"",
                     ""id"": ""a5b8f042-084c-4808-ae38-b6957282804e"",
@@ -206,6 +215,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Delete"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""497c2eb8-0902-4d8d-997e-012c8731df34"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SixButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -378,6 +398,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActions_ThreeButton = m_PlayerActions.FindAction("ThreeButton", throwIfNotFound: true);
         m_PlayerActions_FourButton = m_PlayerActions.FindAction("FourButton", throwIfNotFound: true);
         m_PlayerActions_FiveButton = m_PlayerActions.FindAction("FiveButton", throwIfNotFound: true);
+        m_PlayerActions_SixButton = m_PlayerActions.FindAction("SixButton", throwIfNotFound: true);
         m_PlayerActions_Rotate = m_PlayerActions.FindAction("Rotate", throwIfNotFound: true);
         m_PlayerActions_Escape = m_PlayerActions.FindAction("Escape", throwIfNotFound: true);
         m_PlayerActions_Delete = m_PlayerActions.FindAction("Delete", throwIfNotFound: true);
@@ -451,6 +472,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_ThreeButton;
     private readonly InputAction m_PlayerActions_FourButton;
     private readonly InputAction m_PlayerActions_FiveButton;
+    private readonly InputAction m_PlayerActions_SixButton;
     private readonly InputAction m_PlayerActions_Rotate;
     private readonly InputAction m_PlayerActions_Escape;
     private readonly InputAction m_PlayerActions_Delete;
@@ -464,6 +486,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ThreeButton => m_Wrapper.m_PlayerActions_ThreeButton;
         public InputAction @FourButton => m_Wrapper.m_PlayerActions_FourButton;
         public InputAction @FiveButton => m_Wrapper.m_PlayerActions_FiveButton;
+        public InputAction @SixButton => m_Wrapper.m_PlayerActions_SixButton;
         public InputAction @Rotate => m_Wrapper.m_PlayerActions_Rotate;
         public InputAction @Escape => m_Wrapper.m_PlayerActions_Escape;
         public InputAction @Delete => m_Wrapper.m_PlayerActions_Delete;
@@ -494,6 +517,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @FiveButton.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnFiveButton;
                 @FiveButton.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnFiveButton;
                 @FiveButton.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnFiveButton;
+                @SixButton.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnSixButton;
+                @SixButton.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnSixButton;
+                @SixButton.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnSixButton;
                 @Rotate.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRotate;
                 @Rotate.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRotate;
                 @Rotate.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRotate;
@@ -525,6 +551,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @FiveButton.started += instance.OnFiveButton;
                 @FiveButton.performed += instance.OnFiveButton;
                 @FiveButton.canceled += instance.OnFiveButton;
+                @SixButton.started += instance.OnSixButton;
+                @SixButton.performed += instance.OnSixButton;
+                @SixButton.canceled += instance.OnSixButton;
                 @Rotate.started += instance.OnRotate;
                 @Rotate.performed += instance.OnRotate;
                 @Rotate.canceled += instance.OnRotate;
@@ -595,6 +624,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnThreeButton(InputAction.CallbackContext context);
         void OnFourButton(InputAction.CallbackContext context);
         void OnFiveButton(InputAction.CallbackContext context);
+        void OnSixButton(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnDelete(InputAction.CallbackContext context);

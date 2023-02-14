@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d5fa34b89ecddf4aab01cf2d3fd0ed7, type: 3}
-  m_Name: ColoredCube
+  m_Name: RectangleTall
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 1575968940587506190, guid: 3f4efdfe350e8d748ae613493448f710, type: 3}
-  _icon: {fileID: 21300000, guid: 2728ec90b8e16164fbe490ff11f20fc2, type: 3}
+  _prefab: {fileID: 5043190627888534534, guid: b272bd5d46d27524db37b438f6cfdda6, type: 3}
+  _icon: {fileID: 21300000, guid: 98ff7873412c03b4aad3797ac8cf66a0, type: 3}

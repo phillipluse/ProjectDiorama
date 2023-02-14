@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: 1259349726918602167, guid: 5c28d001a82d4aa48bfdce79059f3320,
         type: 3}
       propertyPath: m_Name
-      value: SingleSquare
+      value: CubeSmall
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: 5c28d001a82d4aa48bfdce79059f3320,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: 5c28d001a82d4aa48bfdce79059f3320,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 6.0839815
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: 5c28d001a82d4aa48bfdce79059f3320,
         type: 3}
@@ -31,7 +31,7 @@ PrefabInstance:
     - target: {fileID: 3085047139417115424, guid: 5c28d001a82d4aa48bfdce79059f3320,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.9129014
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: 5c28d001a82d4aa48bfdce79059f3320,
         type: 3}
@@ -96,6 +96,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallCube
       objectReference: {fileID: 0}
+    - target: {fileID: 1819123684016732618, guid: 7f900533fe3aadd43b81687ff3565ee3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b8b052e4ce80534db4360d0912d6291, type: 2}
     - target: {fileID: 5886548234622382529, guid: 7f900533fe3aadd43b81687ff3565ee3,
         type: 3}
       propertyPath: m_RootOrder

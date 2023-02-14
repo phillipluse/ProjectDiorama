@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ObjectTestQuibli
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Parent: {fileID: 2100000, guid: 6b8b052e4ce80534db4360d0912d6291, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _DETAILMAPBLENDINGMODE_MULTIPLY
+  - _TEXTUREBLENDINGMODE_MULTIPLY
+  - _UNITYSHADOW_OCCLUSION
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Opaque
+  disabledShaderPasses:
+  - SRPDEFAULTUNLIT
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _GradientRamp:
+        m_Texture: {fileID: 2953573773586368655}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Smoothness: 0.5
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!114 &1426762771807366646
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
+--- !u!28 &2953573773586368655
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: z__GradientRampTex{"mode":0,"colorKeys":[{"color":{"r":0.23529411852359773,"g":0.1558387726545334,"b":0.10588236153125763,"a":1.0},"time":0.0},{"color":{"r":0.9433962106704712,"g":0.8479070067405701,"b":0.4850480556488037,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":1.0,"time":1.0}]}
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 2
+  m_Width: 256
+  m_Height: 1
+  m_CompleteImageSize: 1024
+  m_MipsStripped: 0
+  m_TextureFormat: 5
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 1024
+  _typelessdata: ff3c281bff3d281bff3d291cff3e2a1cff3f2b1dff402b1dff402c1dff412d1eff422d1eff422e1eff432f1fff442f1fff443020ff453120ff463120ff473221ff473321ff483421ff493422ff493522ff4a3623ff4b3623ff4c3723ff4c3824ff4d3824ff4e3924ff4e3a25ff4f3a25ff503b26ff513c26ff513d26ff523d27ff533e27ff533f28ff543f28ff554028ff554129ff564129ff574229ff58432aff58432aff59442bff5a452bff5a452bff5b462cff5c472cff5d482cff5d482dff5e492dff5f4a2eff5f4a2eff604b2eff614c2fff624c2fff624d2fff634e30ff644e30ff644f31ff655031ff665131ff665132ff675232ff685333ff695333ff695433ff6a5534ff6b5534ff6b5634ff6c5735ff6d5735ff6e5836ff6e5936ff6f5a36ff705a37ff705b37ff715c37ff725c38ff735d38ff735e39ff745e39ff755f39ff75603aff76603aff77613aff77623bff78633bff79633cff7a643cff7a653cff7b653dff7c663dff7c673eff7d673eff7e683eff7f693fff7f693fff806a3fff816b40ff816c40ff826c41ff836d41ff846e41ff846e42ff856f42ff867042ff867043ff877143ff887244ff887244ff897344ff8a7445ff8b7545ff8b7545ff8c7646ff8d7746ff8d7747ff8e7847ff8f7947ff907948ff907a48ff917b48ff927b49ff927c49ff937d4aff947e4aff957e4aff957f4bff96804bff97804cff97814cff98824cff99824dff99834dff9a844dff9b844eff9c854eff9c864fff9d874fff9e874fff9e8850ff9f8950ffa08950ffa18a51ffa18b51ffa28b52ffa38c52ffa38d52ffa48d53ffa58e53ffa68f53ffa69054ffa79054ffa89155ffa89255ffa99255ffaa9356ffaa9456ffab9457ffac9557ffad9657ffad9658ffae9758ffaf9858ffaf9959ffb09959ffb19a5affb29b5affb29b5affb39c5bffb49d5bffb49d5bffb59e5cffb69f5cffb79f5dffb7a05dffb8a15dffb9a25effb9a25effbaa35effbba45fffbba45fffbca560ffbda660ffbea660ffbea761ffbfa861ffc0a862ffc0a962ffc1aa62ffc2ab63ffc3ab63ffc3ac63ffc4ad64ffc5ad64ffc5ae65ffc6af65ffc7af65ffc7b066ffc8b166ffc9b166ffcab267ffcab367ffcbb468ffccb468ffccb568ffcdb669ffceb669ffcfb769ffcfb86affd0b86affd1b96bffd1ba6bffd2ba6bffd3bb6cffd4bc6cffd4bd6dffd5bd6dffd6be6dffd6bf6effd7bf6effd8c06effd8c16fffd9c16fffdac270ffdbc370ffdbc370ffdcc471ffddc571ffddc671ffdec672ffdfc772ffe0c873ffe0c873ffe1c973ffe2ca74ffe2ca74ffe3cb74ffe4cc75ffe5cc75ffe5cd76ffe6ce76ffe7cf76ffe7cf77ffe8d077ffe9d178ffe9d178ffead278ffebd379ffecd379ffecd479ffedd57affeed57affeed67bffefd77bfff0d87bfff1d87c
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 

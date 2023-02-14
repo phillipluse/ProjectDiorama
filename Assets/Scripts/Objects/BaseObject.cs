@@ -34,10 +34,7 @@ namespace ProjectDiorama
 
             Selectable = GetSelectable();
             
-            if (IsOnGrid(position))
-            {
-                _tempGridWorldPosition = GetGridWorldPosition(position);
-            }
+            _tempGridWorldPosition = GetGridWorldPosition(position);
             
             _isInitialized = true;
             Events.AnyObjectInitialized(this);

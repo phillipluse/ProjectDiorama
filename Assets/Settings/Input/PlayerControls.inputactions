@@ -60,6 +60,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "SixButton",
+                    "type": "Button",
+                    "id": "b82976f4-a10e-4e3e-94dc-9dc55ed5b088",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Rotate",
                     "type": "Button",
                     "id": "a5b8f042-084c-4808-ae38-b6957282804e",
@@ -184,6 +193,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Delete",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "497c2eb8-0902-4d8d-997e-012c8731df34",
+                    "path": "<Keyboard>/6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SixButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

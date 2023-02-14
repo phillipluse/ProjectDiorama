@@ -11,31 +11,34 @@ namespace ProjectDiorama
         {
             _player = player;
             Events.ObjectButtonBarCreatedEvent += OnObjectButtonBarCreated;
+            
+            GameWorld.Controls.PlayerActions.FiveButton.performed += ctx => TryCreateObject(5);
+            GameWorld.Controls.PlayerActions.SixButton.performed += ctx => TryCreateObject(6);
         }
 
         public void SetInput(ref PlayerFrameInput input)
         {
             if (input.IsOneButtonPressedThisFrame)
             {
-                TryCreateObject(0);
+                TryCreateObject(1);
                 return;
             }
             
             if (input.IsTwoButtonPressedThisFrame)
             {
-                TryCreateObject(1);
+                TryCreateObject(2);
                 return;
             }            
             
             if (input.IsThreeButtonPressedThisFrame)
             {
-                TryCreateObject(2);
+                TryCreateObject(3);
                 return;
             }
 
             if (input.IsFourButtonPressedThisFrame)
             {
-                TryCreateObject(3);
+                TryCreateObject(4);
                 return;
             }
         }

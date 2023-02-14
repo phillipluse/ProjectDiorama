@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: RectangleSmall
   m_EditorClassIdentifier: 
   _prefab: {fileID: 2269672172588843444, guid: c8bf1ef6d5b640e4d9a8791e2c83f966, type: 3}
-  _icon: {fileID: 21300000, guid: d32da60f5517cee4fae20feb96678a34, type: 3}
+  _icon: {fileID: 21300000, guid: 96cb26c5b4ca84846a92e794ecec034c, type: 3}
