@@ -9,8 +9,6 @@ namespace ProjectDiorama
         [SerializeField] Image _icon;
         [SerializeField] TextMeshProUGUI _shortCutNumber;
 
-        
-
         ObjectSO _objectSO;
         
         public void OnButtonClick()

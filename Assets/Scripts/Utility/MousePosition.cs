@@ -77,6 +77,7 @@ namespace ProjectDiorama
         }
         
         public static Vector2 ScreenPosition => Mouse.current.position.ReadValue();
+        public static Vector2 MouseDelta => Mouse.current.delta.ReadValue();
 
         static bool IsAnyObjectHitThisFrame => _hit.collider != null;
     }

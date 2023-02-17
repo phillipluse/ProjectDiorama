@@ -19,9 +19,13 @@ namespace ProjectDiorama
         Vector3 _moveVelocity = Vector3.zero;
         float _rotationAmount;
         float _rotateVelocity;
+
+        bool _isMovePan;
+        Vector3 _startMovePan;
         
-        public void Move(Vector2 directionInput, float currentFOV, float maxFOV)
+        public void MoveSmooth(Vector2 directionInput, float currentFOV, float maxFOV)
         {
+            if (_isMovePan) _isMovePan = false;
             if(_moveVelocity.IsApproximateTo(Vector3.zero) && directionInput.IsApproximateTo(Vector2.zero)) return;
             
             var multiplier = currentFOV / maxFOV;
@@ -42,6 +46,24 @@ namespace ProjectDiorama
                 _moveVelocity = Vector3.zero;
                 return;
             }
+
+            newPosition.x = newPosition.x.Clamp(0.0f - _borderWidth, GameWorld.ActiveGrid.GridWidth + _borderWidth);
+            newPosition.z = newPosition.z.Clamp(0.0f - _borderHeight, GameWorld.ActiveGrid.GridHeight + _borderHeight);
+            
+            MoveTo(newPosition);
+        }
+
+        public void MovePan()
+        {
+            if (!_isMovePan)
+            {
+                _isMovePan = true;
+                _startMovePan = GameWorld.PlayerPosition;
+            }
+
+            var delta = _startMovePan - GameWorld.PlayerPosition;
+            var newPosition = transform.position + delta;
+            newPosition.y = 0.0f;
 
             newPosition.x = newPosition.x.Clamp(0.0f - _borderWidth, GameWorld.ActiveGrid.GridWidth + _borderWidth);
             newPosition.z = newPosition.z.Clamp(0.0f - _borderHeight, GameWorld.ActiveGrid.GridHeight + _borderHeight);

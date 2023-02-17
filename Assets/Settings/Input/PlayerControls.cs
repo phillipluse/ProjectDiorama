@@ -261,6 +261,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": ""Invert,Clamp(min=-1,max=1)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ScrollPress"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ad2b4ef-331d-4440-9905-fbfcd6a0b328"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -384,6 +393,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb5d75cd-2758-4999-a63f-7f0162f518d0"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -407,6 +427,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_CameraActions_CameraMovement = m_CameraActions.FindAction("CameraMovement", throwIfNotFound: true);
         m_CameraActions_CameraRotation = m_CameraActions.FindAction("CameraRotation", throwIfNotFound: true);
         m_CameraActions_Scroll = m_CameraActions.FindAction("Scroll", throwIfNotFound: true);
+        m_CameraActions_ScrollPress = m_CameraActions.FindAction("ScrollPress", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -574,6 +595,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_CameraActions_CameraMovement;
     private readonly InputAction m_CameraActions_CameraRotation;
     private readonly InputAction m_CameraActions_Scroll;
+    private readonly InputAction m_CameraActions_ScrollPress;
     public struct CameraActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -581,6 +603,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @CameraMovement => m_Wrapper.m_CameraActions_CameraMovement;
         public InputAction @CameraRotation => m_Wrapper.m_CameraActions_CameraRotation;
         public InputAction @Scroll => m_Wrapper.m_CameraActions_Scroll;
+        public InputAction @ScrollPress => m_Wrapper.m_CameraActions_ScrollPress;
         public InputActionMap Get() { return m_Wrapper.m_CameraActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -599,6 +622,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Scroll.started -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScroll;
+                @ScrollPress.started -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScrollPress;
+                @ScrollPress.performed -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScrollPress;
+                @ScrollPress.canceled -= m_Wrapper.m_CameraActionsActionsCallbackInterface.OnScrollPress;
             }
             m_Wrapper.m_CameraActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -612,6 +638,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
+                @ScrollPress.started += instance.OnScrollPress;
+                @ScrollPress.performed += instance.OnScrollPress;
+                @ScrollPress.canceled += instance.OnScrollPress;
             }
         }
     }
@@ -634,5 +663,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnCameraMovement(InputAction.CallbackContext context);
         void OnCameraRotation(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnScrollPress(InputAction.CallbackContext context);
     }
 }

@@ -39,7 +39,16 @@ namespace ProjectDiorama
         public void SetInput(ref CameraFrameInput input)
         {
             var currentFOV = _virtualCamera.m_Lens.FieldOfView;
-            _cameraTarget.Move(input.PanMovement, currentFOV, _maxZoom);
+
+            if (input.ScrollPress)
+            {
+                _cameraTarget.MovePan();
+            }
+            else
+            {
+                _cameraTarget.MoveSmooth(input.PanMovement.normalized, currentFOV, _maxZoom);
+            }
+            
             _cameraTarget.RotateYAxis(input.RotationMovement.x);
             
             ElevationChange(input.RotationMovement.y);

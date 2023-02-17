@@ -12,8 +12,8 @@ namespace ProjectDiorama
             _player = player;
             Events.ObjectButtonBarCreatedEvent += OnObjectButtonBarCreated;
             
-            GameWorld.Controls.PlayerActions.FiveButton.performed += ctx => TryCreateObject(5);
-            GameWorld.Controls.PlayerActions.SixButton.performed += ctx => TryCreateObject(6);
+            GameWorld.Controls.PlayerActions.FiveButton.performed += _ => TryCreateObject(5);
+            GameWorld.Controls.PlayerActions.SixButton.performed +=  _ => TryCreateObject(6);
         }
 
         public void SetInput(ref PlayerFrameInput input)
