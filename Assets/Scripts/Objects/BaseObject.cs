@@ -38,9 +38,11 @@ namespace ProjectDiorama
             
             _isInitialized = true;
             Events.AnyObjectInitialized(this);
+            UIEvents.TurnButtonPressedEvent += OnTurnButtonPressed;
             SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
         }
-        
+
+
         public void OnHoverEnter()
         {
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
@@ -227,19 +229,17 @@ namespace ProjectDiorama
             }
         }
         
+        void OnTurnButtonPressed()
+        {
+            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            {
+                baseObjectModule.Tick();
+            }
+        }
+        
         bool ObjectCanBePlacedAtPosition(Vector3 position)
         {
             return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, Selectable.GetSettings());
-        }
-
-        static bool IsOnGrid(Vector3 position)
-        {
-            return GameWorld.ActiveGrid.IsPositionOnGrid(position);
-        }
-
-        static Vector3 GetGridWorldPosition(Vector3 position)
-        {
-            return GameWorld.ActiveGrid.GetGridWorldPosition(position);
         }
 
         void AddToGrid(Vector3 worldPosition)
@@ -250,6 +250,16 @@ namespace ProjectDiorama
         void RemoveFromGrid()
         {
             GameWorld.ActiveGrid.RemoveObjectFromGrid(_tempGridWorldPosition, Selectable.GetSettings());
+        }
+
+        static bool IsOnGrid(Vector3 position)
+        {
+            return GameWorld.ActiveGrid.IsPositionOnGrid(position);
+        }
+
+        static Vector3 GetGridWorldPosition(Vector3 position)
+        {
+            return GameWorld.ActiveGrid.GetGridWorldPosition(position);
         }
     }
 }

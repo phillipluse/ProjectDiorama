@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using MoreMountains.Feedbacks;
 
 namespace ProjectDiorama
 {
@@ -9,13 +10,17 @@ namespace ProjectDiorama
         [Header("References")]
         [SerializeField] ObjectVisual _visual;
         [SerializeField] float _moveHeightOffset;
+        [SerializeField] MMF_Player _feedbackPlayer;
 
+        const int MAX_NUM_OF_TURNS = 4;
+        int _turnNumber;
+        
         BaseObject _baseObject;
         ObjectSettings _settings;
+        IEnumerator _moveCO;
         Vector3 _tempLocalPosition;
         Vector3 _placedLocationPosition;
         Vector3 _movingOffset;
-        IEnumerator _moveCO;
         bool _isMoveCRRunning;
 
         public void Init(BaseObject baseObject)
@@ -63,8 +68,11 @@ namespace ProjectDiorama
         public void OnPlaced()
         {
             gameObject.layer = LayerMask.NameToLayer("PlacedObject");
-            _visual.OnPlaced();
             MoveTo(transform.localPosition - _movingOffset);
+
+            var parentScale = transform.parent.localScale;
+            parentScale.y = 0;
+            transform.parent.localScale = parentScale;
             
             if (!_isMoveCRRunning) return;
             
@@ -86,7 +94,13 @@ namespace ProjectDiorama
             StartCoroutine(_moveCO);
         }
 
-        public void Tick() { }
+        public void Tick()
+        {
+            _visual.OnPlaced();
+            if (_turnNumber == MAX_NUM_OF_TURNS) return;
+            _feedbackPlayer.PlayFeedbacks();
+            _turnNumber++;
+        }
 
         public void OnObjectStateEnter(ObjectState state)
         {

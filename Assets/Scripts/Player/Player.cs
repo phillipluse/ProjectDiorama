@@ -37,8 +37,6 @@ namespace ProjectDiorama
 
         public void SetInput(ref PlayerFrameInput input)
         {
-            _shortcuts.SetInput(ref input);
-
             if (input.IsRotatePressedThisFrame && !_isRotatePressed && HasActiveObject)
             {
                 _isRotatePressed = true;

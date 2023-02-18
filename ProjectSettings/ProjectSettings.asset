@@ -784,7 +784,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: SHAPES_URP;LETAI_TRUESHADOW
+    Standalone: SHAPES_URP;LETAI_TRUESHADOW;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     WebGL: SHAPES_URP;LETAI_TRUESHADOW
   additionalCompilerArguments: {}
   platformArchitecture: {}
