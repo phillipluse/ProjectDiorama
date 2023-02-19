@@ -14,6 +14,13 @@ namespace ProjectDiorama
                    Mathf.Approximately(vector.z, compareVector.z);
         }
         
+        /// <summary> Compares the component values of two vectors </summary>
+        public static bool IsApproximateTo(this Vector2 vector, Vector2 compareVector)
+        {
+            return Mathf.Approximately(vector.x, compareVector.x) && 
+                   Mathf.Approximately(vector.y, compareVector.y);
+        }
+        
         #endregion
 
         #region Floats
@@ -44,13 +51,11 @@ namespace ProjectDiorama
         /// <param name="quat">The world space rotation</param>
         public static Quaternion InverseTransformRotation( this Transform tf, Quaternion quat ) => tf.rotation * quat;
 
-        /// <summary> Compares the component values of two vectors </summary>
-        public static bool IsApproximateTo(this Vector2 vector, Vector2 compareVector)
-        {
-            return Mathf.Approximately(vector.x, compareVector.x) && 
-                   Mathf.Approximately(vector.y, compareVector.y);
-        }
-        
+        /// <summary>Returns a Quaternion with Euler Angles of (0, 0, 0)</summary>
+        /// <param name="quat"></param>
+        /// <returns></returns>
+        public static Quaternion Zero(this Quaternion quat) =>  Quaternion.Euler(Vector3.zero);
+
         #endregion
     }
 }

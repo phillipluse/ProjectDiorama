@@ -6,15 +6,14 @@ namespace ProjectDiorama
     {
         public Vector2Int FootprintGridSize { get; } //x = width, y = length (Z axis)
 
-        readonly Vector3 _startObjectSize;
+        public Vector3 StartObjectSize { get; }
 
         Vector2Int _rotatedFootprintGridSize;
         
         public ObjectSettings(Vector3 objectSize)
         {
-            _startObjectSize = objectSize;
+            StartObjectSize = objectSize;
             FootprintGridSize = CalculateFootprintGridSize();
-            
             UpdateRotatedSize(RotationDirection.Up);
         }
 
@@ -26,7 +25,7 @@ namespace ProjectDiorama
         public Vector3 ObjectOffset(RotationDirection dir)
         {
             var cellSize = GameWorld.ActiveGridCellSize;
-            float height = _startObjectSize.y / 2;
+            float height = 0;
             float halfX = IsObjectSingleTile ? (float)cellSize / 2 : (float)FootprintGridSize.x / 2 * cellSize;
             float halfY = IsObjectSingleTile ? (float)cellSize / 2 : (float)FootprintGridSize.y / 2 * cellSize;
             const int posDir = 1;
@@ -45,8 +44,8 @@ namespace ProjectDiorama
         Vector2Int CalculateFootprintGridSize()
         {
             var cellSize = GameWorld.ActiveGridCellSize;
-            var width = Mathf.CeilToInt(_startObjectSize.x / cellSize);
-            var length = Mathf.CeilToInt(_startObjectSize.z / cellSize);
+            var width = Mathf.CeilToInt(Mathf.Round(StartObjectSize.x) / cellSize);
+            var length = Mathf.CeilToInt(Mathf.Round(StartObjectSize.z) / cellSize);
             return new Vector2Int(width, length);
         }
         

@@ -5,12 +5,15 @@ using MoreMountains.Feedbacks;
 
 namespace ProjectDiorama
 {
-    public class BuildingObject : MonoBehaviour, IBaseObjectModule, ISelectable
+    public class BuildingGridObject : MonoBehaviour, IBaseObjectModule, ISelectable
     {
         [Header("References")]
         [SerializeField] ObjectVisual _visual;
-        [SerializeField] float _moveHeightOffset;
+        [SerializeField] GameObject _visualObject;
         [SerializeField] MMF_Player _feedbackPlayer;
+
+        [Header("Properties")]
+        [SerializeField] float _moveHeightOffset;
 
         const int MAX_NUM_OF_TURNS = 4;
         int _turnNumber;
@@ -19,24 +22,20 @@ namespace ProjectDiorama
         ObjectSettings _settings;
         IEnumerator _moveCO;
         Vector3 _tempLocalPosition;
-        Vector3 _placedLocationPosition;
-        Vector3 _movingOffset;
         bool _isMoveCRRunning;
 
         public void Init(BaseObject baseObject)
         {
             _baseObject = baseObject;
             
-            var col = gameObject.GetComponent<Collider>();
-            var bounds = col.bounds;
-            var size = bounds.size;
-            _settings = new ObjectSettings(size);
+            var bounds = _visualObject.GetComponent<Renderer>().bounds;
+            _settings = new ObjectSettings(bounds.size);
 
-            _movingOffset = new Vector3(0.0f, _moveHeightOffset, 0.0f);
+            MoveVisualObject(VerticalOffset);
 
             var offset = _settings.ObjectOffset(RotationDirection.Up);
-            
-            MoveTo(offset + _movingOffset);
+            offset.y = 0;
+            MoveTo(offset);
 
             _visual.Init();
         }
@@ -53,30 +52,31 @@ namespace ProjectDiorama
 
         public void OnSelected()
         {
-            _placedLocationPosition = transform.localPosition;
-            MoveTo( _placedLocationPosition + _movingOffset);
+            MoveVisualObject(VerticalOffset);
             _visual.OnSelect();
         }
 
         public void OnDeSelect()
         {
-            MoveTo(_placedLocationPosition);
+            MoveVisualObject(NormalOffset);
             _settings.UpdateRotatedSize(_baseObject.PlacedRotationDirection);
+            MoveTo(_settings.ObjectOffset(_baseObject.PlacedRotationDirection));
             _visual.OnPlaced();
         }
 
         public void OnPlaced()
         {
-            gameObject.layer = LayerMask.NameToLayer("PlacedObject");
-            MoveTo(transform.localPosition - _movingOffset);
+            _visualObject.layer = LayerMask.NameToLayer("PlacedObject");
+            MoveVisualObject(NormalOffset);
+            _visual.OnPlaced();
 
-            var parentScale = transform.parent.localScale;
-            parentScale.y = 0;
-            transform.parent.localScale = parentScale;
+            // var parentScale = transform.parent.localScale;
+            // parentScale.y = 0;
+            // transform.parent.localScale = parentScale;
             
             if (!_isMoveCRRunning) return;
             
-            MoveTo(_tempLocalPosition - _movingOffset);
+            MoveTo(_tempLocalPosition);
             StopCoroutine(_moveCO);
             _isMoveCRRunning = false;
         }
@@ -86,9 +86,7 @@ namespace ProjectDiorama
         public void OnRotate(RotationDirection dir)
         {
             _settings.UpdateRotatedSize(dir);
-            var offSet = _settings.ObjectOffset(dir);
-            
-            _tempLocalPosition = offSet + _movingOffset;
+            _tempLocalPosition = _settings.ObjectOffset(dir);
             if (_isMoveCRRunning) return;
             _moveCO = MoveCO();
             StartCoroutine(_moveCO);
@@ -96,10 +94,10 @@ namespace ProjectDiorama
 
         public void Tick()
         {
-            _visual.OnPlaced();
-            if (_turnNumber == MAX_NUM_OF_TURNS) return;
-            _feedbackPlayer.PlayFeedbacks();
-            _turnNumber++;
+            // _visual.OnPlaced();
+            // if (_turnNumber == MAX_NUM_OF_TURNS) return;
+            // _feedbackPlayer.PlayFeedbacks();
+            // _turnNumber++;
         }
 
         public void OnObjectStateEnter(ObjectState state)
@@ -128,6 +126,11 @@ namespace ProjectDiorama
             _isMoveCRRunning = false;
         }
 
+        void MoveVisualObject(Vector3 position)
+        {
+            _visualObject.transform.localPosition = position;
+        }
+
         void MoveTo(Vector3 position)
         {
             transform.localPosition = position;
@@ -137,5 +140,7 @@ namespace ProjectDiorama
         public Transform GetTransform() => transform;
         public BaseObject GetBaseObject() => _baseObject;
         public Vector2 FootprintSize() => _settings.FootprintGridSize;
+        Vector3 VerticalOffset => new(0.0f, _moveHeightOffset + _settings.StartObjectSize.y / 2, 0.0f);
+        Vector3 NormalOffset => new(0.0f, _settings.StartObjectSize.y / 2, 0.0f);
     }
 }

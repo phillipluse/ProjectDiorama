@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ProjectDiorama
@@ -17,6 +18,11 @@ namespace ProjectDiorama
         void OnEnable()
         {
             Events.AnyObjectSelectedEvent += OnObjectSelect;
+        }
+
+        void OnDisable()
+        {
+            Events.AnyObjectSelectedEvent -= OnObjectSelect;
         }
 
         public void Tick()
@@ -49,31 +55,30 @@ namespace ProjectDiorama
 
         void CheckIfOverSelectableObject()
         {
-            if (IsOverSelectableObject(out ISelectable selectable) && !MousePosition.IsOverUI())
+            if (IsOverSelectableObject(out BaseObject b) && !MousePosition.IsOverUI())
             {
-                var baseObject = selectable.GetBaseObject();
-                ChangeBaseObject(baseObject);
+                ChangeBaseObject(b);
                 return;
             }
 
             Release();
         }
 
-        bool IsOverSelectableObject(out ISelectable selectable)
+        bool IsOverSelectableObject(out BaseObject baseObject)
         {
             if (!MousePosition.IsPositionOverLayerMask(_objectLayerMask, out RaycastHit hit))
             {
-                selectable = null;
+                baseObject = null;
                 return false;
             }
             
-            if (hit.transform.gameObject.TryGetComponent(out ISelectable s))
+            if (hit.transform.root.TryGetComponent(out BaseObject b))
             {
-                selectable = s;
+                baseObject = b;
                 return true;
             }
 
-            selectable = null;
+            baseObject = null;
             return false;
         }
         

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public class BaseObject : MonoBehaviour
+    public abstract class BaseObject : MonoBehaviour
     {
         public Action<ObjectState> StateChange;
         public ISelectable Selectable { get; private set; }
@@ -16,13 +16,11 @@ namespace ProjectDiorama
         RotationDirection _tempRotationDirection;
         Quaternion _targetRotation;
         IEnumerator _rotateCO;
-        Vector3 _tempGridWorldPosition;
-        Vector3 _placedGridWorldPosition;
         bool _isRotateCRRunning;
         bool _isInitialized;
         bool _isSelected;
        
-        public void Init(Vector3 position)
+        public virtual void Init(Vector3 position)
         {
             if (_isInitialized) return;
             _objectModules = GetComponentsInChildren<IBaseObjectModule>();
@@ -34,14 +32,10 @@ namespace ProjectDiorama
 
             Selectable = GetSelectable();
             
-            _tempGridWorldPosition = GetGridWorldPosition(position);
-            
             _isInitialized = true;
             Events.AnyObjectInitialized(this);
             UIEvents.TurnButtonPressedEvent += OnTurnButtonPressed;
-            SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
         }
-
 
         public void OnHoverEnter()
         {
@@ -59,12 +53,9 @@ namespace ProjectDiorama
             }
         }
 
-        public void OnSelected()
+        public virtual void OnSelected()
         {
-            _placedGridWorldPosition = _tempGridWorldPosition;
             PlacedRotationDirection = _tempRotationDirection;
-            RemoveFromGrid();
-            
             foreach (IBaseObjectModule baseObjectModule in _objectModules)
             {
                 baseObjectModule.OnSelected();
@@ -78,7 +69,13 @@ namespace ProjectDiorama
         {
             if (_isSelected)
             {
-                MoveBackToStartPosition();
+                MoveBackToStartPositionAndRotation();
+                foreach (IBaseObjectModule baseObjectModule in _objectModules)
+                {
+                    baseObjectModule.OnDeSelect();
+                }
+           
+                Events.AnyObjectDeSelected(this);
                 return;
             }
             
@@ -92,10 +89,9 @@ namespace ProjectDiorama
             Destroy(gameObject);
         }
 
-        public bool TryToPlaceObject()
+        public virtual bool TryToPlaceObject()
         {
             if (_currentState == ObjectState.Warning) return false;
-            MoveTo(_tempGridWorldPosition);
 
             if (_isRotateCRRunning)
             {
@@ -108,33 +104,12 @@ namespace ProjectDiorama
             {
                 baseObjectModule.OnPlaced();
             }
-            
-            AddToGrid(_tempGridWorldPosition);
+           
             Events.AnyObjectPlaced(this);
             return true;
         }
 
-        public void Move(Vector3 position)
-        {
-            Vector3 newPosition;
-            const float factor = 20.0f;
-            
-            if (IsOnGrid(position))
-            {
-                _tempGridWorldPosition = GetGridWorldPosition(position);
-                SetState(ObjectCanBePlacedAtPosition(position) ? ObjectState.Normal : ObjectState.Warning);
-               newPosition = Vector3.Lerp(transform.position, 
-                    _tempGridWorldPosition, Time.deltaTime * factor);
-            }
-            else
-            {
-                _tempGridWorldPosition = position;
-                SetState(ObjectState.Warning);
-                newPosition = position;
-            }
-            
-            MoveTo(newPosition);
-        }
+        public abstract void Move(Vector3 position);
 
         public void Rotate()
         {
@@ -170,7 +145,7 @@ namespace ProjectDiorama
             _isRotateCRRunning = false;
         }
 
-        void MoveTo(Vector3 position)
+        protected void MoveTo(Vector3 position)
         {
             transform.position = position;
         }
@@ -179,27 +154,19 @@ namespace ProjectDiorama
         {
             transform.rotation = rotation;
         }
-        
-        void MoveBackToStartPosition()
+
+        protected virtual void MoveBackToStartPositionAndRotation()
         {
             _tempRotationDirection = PlacedRotationDirection;
-            _tempGridWorldPosition = _placedGridWorldPosition;
+            
             var rotation = Quaternion.Euler(0, PlacedRotationDirection.RotationAngle(), 0);
-            transform.SetPositionAndRotation(_placedGridWorldPosition, rotation);
+            transform.rotation =  rotation;
 
             if (_isRotateCRRunning)
             {
                 StopCoroutine(_rotateCO);
                 _isRotateCRRunning = false;
             }
-
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
-            {
-                baseObjectModule.OnDeSelect();
-            }
-
-            AddToGrid(_placedGridWorldPosition);
-            Events.AnyObjectDeSelected(this);
         }
 
         ISelectable GetSelectable()
@@ -213,7 +180,7 @@ namespace ProjectDiorama
             return null;
         }
 
-        void SetState(ObjectState state)
+        public void SetState(ObjectState state)
         {
             if (_currentState == state) return;
             _currentState = state;
@@ -235,31 +202,6 @@ namespace ProjectDiorama
             {
                 baseObjectModule.Tick();
             }
-        }
-        
-        bool ObjectCanBePlacedAtPosition(Vector3 position)
-        {
-            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, Selectable.GetSettings());
-        }
-
-        void AddToGrid(Vector3 worldPosition)
-        {
-            GameWorld.ActiveGrid.AddObjectToGrid(worldPosition, Selectable.GetSettings());
-        }
-
-        void RemoveFromGrid()
-        {
-            GameWorld.ActiveGrid.RemoveObjectFromGrid(_tempGridWorldPosition, Selectable.GetSettings());
-        }
-
-        static bool IsOnGrid(Vector3 position)
-        {
-            return GameWorld.ActiveGrid.IsPositionOnGrid(position);
-        }
-
-        static Vector3 GetGridWorldPosition(Vector3 position)
-        {
-            return GameWorld.ActiveGrid.GetGridWorldPosition(position);
         }
     }
 }

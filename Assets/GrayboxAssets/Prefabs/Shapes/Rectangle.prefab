@@ -13,10 +13,8 @@ GameObject:
   - component: {fileID: 6932573003894271726}
   - component: {fileID: 6009456636535229071}
   - component: {fileID: 1617636680158169235}
-  - component: {fileID: 7139545937925124417}
-  - component: {fileID: -1932483280151491940}
   - component: {fileID: -7225331921027446850}
-  - component: {fileID: 6787444190233720145}
+  - component: {fileID: 3363258859668654307}
   m_Layer: 0
   m_Name: Rectangle
   m_TagString: Untagged
@@ -37,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1452462653876418573
 MonoBehaviour:
@@ -4807,7 +4805,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 464
+  m_VersionIndex: 467
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4902,37 +4900,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8, y: 0.8, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7139545937925124417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879675723745281111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e92598e2a1d78a84b9c199c9edc6bd96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _visual: {fileID: -1932483280151491940}
-  _moveHeightOffset: 0.2
---- !u!114 &-1932483280151491940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879675723745281111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed5ce142566a6324f94050f3d84b26c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 6009456636535229071}
-  _outline: {fileID: -7225331921027446850}
-  _normalMaterial: {fileID: 2100000, guid: 6b8b052e4ce80534db4360d0912d6291, type: 2}
-  _warningMaterial: {fileID: 2100000, guid: d03894ad4bddd484d901defbea276b03, type: 2}
-  _ghostMaterial: {fileID: 2100000, guid: be4c1884bfd37724984e9d8dbe164283, type: 2}
 --- !u!114 &-7225331921027446850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4951,7 +4918,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!33 &6787444190233720145
+--- !u!33 &3363258859668654307
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

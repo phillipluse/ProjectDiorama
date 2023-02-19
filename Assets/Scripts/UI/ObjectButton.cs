@@ -19,8 +19,9 @@ namespace ProjectDiorama
         public void Init(ObjectSO objectSO, int shortCutNumber)
         {
             _objectSO = objectSO;
-            _icon.sprite = _objectSO.Icon;
             _shortCutNumber.text = $"{shortCutNumber}";
+            if (objectSO.Icon == null) return;
+            _icon.sprite = _objectSO.Icon;
         }
 
         void CreateObject()
