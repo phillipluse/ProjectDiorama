@@ -5,16 +5,16 @@ namespace ProjectDiorama
 {
     public class TriggerCheck : MonoBehaviour
     {
-        public Action TriggerEnter;
-        public Action TriggerExit;
+        public Action<Collider> TriggerEnter;
+        public Action<Collider> TriggerExit;
         void OnTriggerEnter(Collider other)
         {
-            TriggerEnter?.Invoke();
+            TriggerEnter?.Invoke(other);
         }
 
         void OnTriggerExit(Collider other)
         {
-            TriggerExit?.Invoke();
+            TriggerExit?.Invoke(other);
         }
     }
 }

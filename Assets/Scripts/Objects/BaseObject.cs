@@ -9,10 +9,10 @@ namespace ProjectDiorama
         public Action<ObjectState> StateChange;
         public ISelectable Selectable { get; private set; }
         public RotationDirection PlacedRotationDirection { get; private set; }
+        public ObjectState CurrentState = ObjectState.None;
         
-        IBaseObjectModule[] _objectModules;
+        protected IBaseObjectModule[] ObjectModules;
 
-        ObjectState _currentState = ObjectState.None;
         RotationDirection _tempRotationDirection;
         Quaternion _targetRotation;
         IEnumerator _rotateCO;
@@ -23,9 +23,9 @@ namespace ProjectDiorama
         public virtual void Init(Vector3 position)
         {
             if (_isInitialized) return;
-            _objectModules = GetComponentsInChildren<IBaseObjectModule>();
+            ObjectModules = GetComponentsInChildren<IBaseObjectModule>();
             
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.Init(this);
             }
@@ -37,9 +37,19 @@ namespace ProjectDiorama
             UIEvents.TurnButtonPressedEvent += OnTurnButtonPressed;
         }
 
+        public void Tick(Vector3 worldPosition)
+        {
+            Move(worldPosition);
+            
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
+            {
+                baseObjectModule.Tick();
+            }
+        }
+
         public void OnHoverEnter()
         {
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.OnHoverEnter();
             }
@@ -47,7 +57,7 @@ namespace ProjectDiorama
 
         public void OnHoverExit()
         {
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.OnHoverExit();
             }
@@ -56,7 +66,7 @@ namespace ProjectDiorama
         public virtual void OnSelected()
         {
             PlacedRotationDirection = _tempRotationDirection;
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.OnSelected();
             }
@@ -69,8 +79,11 @@ namespace ProjectDiorama
         {
             if (_isSelected)
             {
+                _tempRotationDirection = PlacedRotationDirection;
+                _targetRotation = Quaternion.Euler(0, PlacedRotationDirection.RotationAngle(), 0);
                 MoveBackToStartPositionAndRotation();
-                foreach (IBaseObjectModule baseObjectModule in _objectModules)
+                
+                foreach (IBaseObjectModule baseObjectModule in ObjectModules)
                 {
                     baseObjectModule.OnDeSelect();
                 }
@@ -91,7 +104,7 @@ namespace ProjectDiorama
 
         public virtual bool TryToPlaceObject()
         {
-            if (_currentState == ObjectState.Warning) return false;
+            if (CurrentState.IsWarning()) return false;
 
             if (_isRotateCRRunning)
             {
@@ -100,7 +113,7 @@ namespace ProjectDiorama
                 _isRotateCRRunning = false;
             }
             
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.OnPlaced();
             }
@@ -122,7 +135,7 @@ namespace ProjectDiorama
                 StartCoroutine(_rotateCO);
             }
 
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.OnRotate(_tempRotationDirection);
             }
@@ -145,8 +158,20 @@ namespace ProjectDiorama
             _isRotateCRRunning = false;
         }
 
+        protected virtual void MoveBackToStartPositionAndRotation()
+        {
+            if (_isRotateCRRunning)
+            {
+                StopCoroutine(_rotateCO);
+                _isRotateCRRunning = false;
+            }
+            
+            RotateTo(_targetRotation);
+        }
+
         protected void MoveTo(Vector3 position)
         {
+            position.y = 0;
             transform.position = position;
         }
 
@@ -155,23 +180,9 @@ namespace ProjectDiorama
             transform.rotation = rotation;
         }
 
-        protected virtual void MoveBackToStartPositionAndRotation()
-        {
-            _tempRotationDirection = PlacedRotationDirection;
-            
-            var rotation = Quaternion.Euler(0, PlacedRotationDirection.RotationAngle(), 0);
-            transform.rotation =  rotation;
-
-            if (_isRotateCRRunning)
-            {
-                StopCoroutine(_rotateCO);
-                _isRotateCRRunning = false;
-            }
-        }
-
         ISelectable GetSelectable()
         {
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 if (baseObjectModule is not ISelectable selectable) continue;
                 return selectable;
@@ -182,15 +193,15 @@ namespace ProjectDiorama
 
         public void SetState(ObjectState state)
         {
-            if (_currentState == state) return;
-            _currentState = state;
+            if (CurrentState == state) return;
+            CurrentState = state;
             OnStateEnter(state);
             StateChange?.Invoke(state);
         }
 
         void OnStateEnter(ObjectState state)
         {
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.OnObjectStateEnter(state);
             }
@@ -198,7 +209,7 @@ namespace ProjectDiorama
         
         void OnTurnButtonPressed()
         {
-            foreach (IBaseObjectModule baseObjectModule in _objectModules)
+            foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
                 baseObjectModule.Tick();
             }

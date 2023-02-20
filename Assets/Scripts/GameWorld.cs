@@ -24,6 +24,7 @@ namespace ProjectDiorama
             ActiveGrid = handler;
         }
 
+        public static BaseObject ActiveObject => Player.ActiveObject;
         public static int ActiveGridCellSize => ActiveGrid.CellSize;
         public static bool IsObjectBeingPlaced => Player.HasActiveObject;
         public static bool IsPlayerOnGrid => Player.IsPlayerOverGrid;

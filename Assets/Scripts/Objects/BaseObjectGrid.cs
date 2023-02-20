@@ -18,7 +18,7 @@ namespace ProjectDiorama
             base.OnSelected();
             
             _placedGridWorldPosition = _tempGridWorldPosition;
-            RemoveFromGrid();
+            RemoveFromGrid(_placedGridWorldPosition);
         }
 
         public override bool TryToPlaceObject()
@@ -53,11 +53,11 @@ namespace ProjectDiorama
 
         protected override void MoveBackToStartPositionAndRotation()
         {
-            base.MoveBackToStartPositionAndRotation();
-            
             _tempGridWorldPosition = _placedGridWorldPosition;
             MoveTo(_placedGridWorldPosition);
             AddToGrid(_placedGridWorldPosition);
+            
+            base.MoveBackToStartPositionAndRotation();
         }
         
         bool ObjectCanBePlacedAtPosition(Vector3 position)
@@ -70,9 +70,9 @@ namespace ProjectDiorama
             GameWorld.ActiveGrid.AddObjectToGrid(worldPosition, Selectable.GetSettings());
         }
 
-        void RemoveFromGrid()
+        void RemoveFromGrid(Vector3 worldPosition)
         {
-            GameWorld.ActiveGrid.RemoveObjectFromGrid(_tempGridWorldPosition, Selectable.GetSettings());
+            GameWorld.ActiveGrid.RemoveObjectFromGrid(worldPosition, Selectable.GetSettings());
         }
 
         static bool IsOnGrid(Vector3 position)

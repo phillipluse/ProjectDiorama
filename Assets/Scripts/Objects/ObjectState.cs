@@ -4,6 +4,7 @@
     {
         None,
         Normal,
-        Warning
+        Warning,
+        Snapped
     }
 }

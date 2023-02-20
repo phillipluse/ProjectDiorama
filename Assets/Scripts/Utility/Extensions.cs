@@ -57,5 +57,13 @@ namespace ProjectDiorama
         public static Quaternion Zero(this Quaternion quat) =>  Quaternion.Euler(Vector3.zero);
 
         #endregion
+
+        #region Enums
+
+        public static bool IsSnapped(this ObjectState state) => state == ObjectState.Snapped;
+        public static bool IsWarning(this ObjectState state) => state == ObjectState.Warning;
+        public static bool IsConnected(this ConnectionStatus status) => status == ConnectionStatus.Connected;
+
+        #endregion
     }
 }

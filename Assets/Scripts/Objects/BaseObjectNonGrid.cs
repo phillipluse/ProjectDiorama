@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public class BaseObjectNonGrid : BaseObject
+    public class BaseObjectNonGrid : BaseObject, ISnap
     {
         Vector3 _tempWorldPosition;
         Vector3 _placedWorldPosition;
@@ -16,15 +16,43 @@ namespace ProjectDiorama
         
         public override void Move(Vector3 position)
         {
+            if (CurrentState.IsSnapped()) return;
             _tempWorldPosition = position;
-            transform.position = position;
+            MoveTo(position);
         }
+        
         protected override void MoveBackToStartPositionAndRotation()
         {
             base.MoveBackToStartPositionAndRotation();
             
             _tempWorldPosition = _placedWorldPosition;
             MoveTo(_placedWorldPosition);
+        }
+
+        public void Snap(Vector3 worldPosition)
+        {
+           MoveTo(worldPosition);
+           SetState(ObjectState.Snapped);
+
+           foreach (IBaseObjectModule module in ObjectModules)
+           {
+               if (module is ISnap s)
+               {
+                   s.Snap(worldPosition);
+               }
+           }
+        }
+
+        public void UnSnap()
+        {
+            SetState(ObjectState.None);
+            foreach (IBaseObjectModule module in ObjectModules)
+            {
+                if (module is ISnap s)
+                {
+                    s.UnSnap();
+                }
+            }
         }
     }
 }

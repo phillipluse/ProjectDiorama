@@ -59,8 +59,15 @@ namespace ProjectDiorama
         public void OnDeSelect()
         {
             MoveVisualObject(NormalOffset);
+            Debug.Log($"{_baseObject.PlacedRotationDirection}");
             _settings.UpdateRotatedSize(_baseObject.PlacedRotationDirection);
-            MoveTo(_settings.ObjectOffset(_baseObject.PlacedRotationDirection));
+            _tempLocalPosition = _settings.ObjectOffset(_baseObject.PlacedRotationDirection);
+            if (_isMoveCRRunning)
+            {
+                StopCoroutine(_moveCO);
+                _isMoveCRRunning = false;
+            }
+            MoveTo(_tempLocalPosition);
             _visual.OnPlaced();
         }
 
@@ -92,6 +99,22 @@ namespace ProjectDiorama
             StartCoroutine(_moveCO);
         }
 
+        IEnumerator MoveCO()
+        {
+            _isMoveCRRunning = true;
+            
+            while (transform.localPosition != _tempLocalPosition)
+            {
+                var factor = 20.0f;
+                var newPosition = Vector3.Slerp(transform.localPosition, 
+                    _tempLocalPosition, Time.deltaTime * factor);
+                MoveTo(newPosition);
+                yield return null;
+            }
+
+            _isMoveCRRunning = false;
+        }
+
         public void Tick()
         {
             // _visual.OnPlaced();
@@ -108,22 +131,6 @@ namespace ProjectDiorama
                 case ObjectState.Warning: _visual.SetToWarning(); break;
                 default: throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
-        }
-
-        IEnumerator MoveCO()
-        {
-            _isMoveCRRunning = true;
-            
-            while (transform.localPosition != _tempLocalPosition)
-            {
-                var factor = 20.0f;
-                var newPosition = Vector3.Slerp(transform.localPosition, 
-                    _tempLocalPosition, Time.deltaTime * factor);
-                MoveTo(newPosition);
-                yield return null;
-            }
-
-            _isMoveCRRunning = false;
         }
 
         void MoveVisualObject(Vector3 position)

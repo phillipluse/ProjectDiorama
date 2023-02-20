@@ -51,6 +51,7 @@ namespace ProjectDiorama
 
             if (input.IsEscapePressedThisFrame && HasActiveObject)
             {
+                if (_isRotatePressed) _isRotatePressed = false;
                 _selectedBaseObject.OnDeSelect();
                 _selectedBaseObject = null;
                 return;
@@ -87,7 +88,7 @@ namespace ProjectDiorama
         void CheckIfMoving()
         {
             if (!HasActiveObject) return;
-            _selectedBaseObject.Move(_playerPosition.Position);
+            _selectedBaseObject.Tick(_playerPosition.Position);
         }
 
         void CheckIfRotate()
@@ -125,6 +126,7 @@ namespace ProjectDiorama
             }
         }
 
+        public BaseObject ActiveObject => _selectedBaseObject;
         public bool HasActiveObject => _selectedBaseObject != null;
         public bool IsPlayerOverGrid => _playerPosition.IsPlayerOnGrid;
         public Vector3 Position => _playerPosition.Position;
