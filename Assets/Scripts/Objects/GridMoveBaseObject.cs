@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public class BaseObjectGrid : BaseObject
+    /// <summary> Handles grid based movement of Base Object </summary>
+    public class GridMoveBaseObject : BaseObject
     {
         Vector3 _tempGridWorldPosition;
         Vector3 _placedGridWorldPosition;
@@ -29,8 +30,8 @@ namespace ProjectDiorama
             AddToGrid(_tempGridWorldPosition);
             return true;
         }
-        
-        public override void Move(Vector3 position)
+
+        protected override void Move(Vector3 position)
         {
             Vector3 newPosition;
             const float factor = 20.0f;
@@ -62,17 +63,17 @@ namespace ProjectDiorama
         
         bool ObjectCanBePlacedAtPosition(Vector3 position)
         {
-            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, Selectable.GetSettings());
+            return GameWorld.ActiveGrid.CanPlaceObjectAtPosition(position, ObjectOnGrid.GetSettings());
         }
 
         void AddToGrid(Vector3 worldPosition)
         {
-            GameWorld.ActiveGrid.AddObjectToGrid(worldPosition, Selectable.GetSettings());
+            GameWorld.ActiveGrid.AddObjectToGrid(worldPosition, ObjectOnGrid.GetSettings());
         }
 
         void RemoveFromGrid(Vector3 worldPosition)
         {
-            GameWorld.ActiveGrid.RemoveObjectFromGrid(worldPosition, Selectable.GetSettings());
+            GameWorld.ActiveGrid.RemoveObjectFromGrid(worldPosition, ObjectOnGrid.GetSettings());
         }
 
         static bool IsOnGrid(Vector3 position)

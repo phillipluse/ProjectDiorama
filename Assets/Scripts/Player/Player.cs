@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ProjectDiorama
@@ -22,46 +23,46 @@ namespace ProjectDiorama
             Events.CreateObjectEvent -= CreateObject;
         }
 
-        void Awake()
+        void Start()
         {
             _shortcuts = new PlayerObjectSelectShortcuts(this);
+            // GameWorld.Controls.PlayerActions.Rotate.performed += _ => ProcessRotate();
+            // GameWorld.Controls.PlayerActions.Select.performed += _ => ProcessSelectPress();
+            // GameWorld.Controls.PlayerActions.Escape.performed += _ => ProcessEscapePress();
+            // GameWorld.Controls.PlayerActions.Delete.performed += _ => ProcessDeletePress();
         }
 
         void Update()
         {
             _playerPosition.Tick();
-            CheckIfMoving();
-            CheckIfRotate();
-            CheckForSelectPress();
+            ProcessActiveObject();
+            // RotateInput();
+            // ProcessSelectPress();
         }
 
         public void SetInput(ref PlayerFrameInput input)
         {
-            if (input.IsRotatePressedThisFrame && !_isRotatePressed && HasActiveObject)
+            if (input.IsRotatePressedThisFrame)
             {
-                _isRotatePressed = true;
+                ProcessRotate();
                 return;
             }
 
-            if (input.IsSelectPressedThisFrame && !_isSelectPressed)
+            if (input.IsSelectPressedThisFrame)
             {
-                _isSelectPressed = true;
+                ProcessSelectPress();
                 return;
             }
 
-            if (input.IsEscapePressedThisFrame && HasActiveObject)
+            if (input.IsEscapePressedThisFrame)
             {
-                if (_isRotatePressed) _isRotatePressed = false;
-                _selectedBaseObject.OnDeSelect();
-                _selectedBaseObject = null;
+                ProcessEscapePress();
                 return;
             }
             
-            if (input.IsDeletePressedThisFrame && HasActiveObject)
+            if (input.IsDeletePressedThisFrame)
             {
-                _selectedBaseObject.OnDelete();
-                _selectedBaseObject = null;
-                return;
+                ProcessDeletePress();
             }
         }
 
@@ -85,24 +86,35 @@ namespace ProjectDiorama
             }
         }
 
-        void CheckIfMoving()
+        void ProcessActiveObject()
         {
             if (!HasActiveObject) return;
             _selectedBaseObject.Tick(_playerPosition.Position);
         }
 
-        void CheckIfRotate()
+        void ProcessRotate()
         {
-            if (!_isRotatePressed) return;
+            // if (!_isRotatePressed) return;
+            if (!HasActiveObject) return;
             _selectedBaseObject.Rotate();
-            _isRotatePressed = false;
+            // _isRotatePressed = false;
         }
 
-        void CheckForSelectPress()
+        void ProcessSelectPress()
         {
-            if (!_isSelectPressed) return;
-            ProcessSelectAction();
-            _isSelectPressed = false;
+            // if (!_isSelectPressed) return;
+            // ProcessSelectAction();
+            if (HasActiveObject)
+            {
+                if (MousePosition.IsOverUI()) return;
+                PlaceObject();
+                return;
+            }
+
+            if (!_playerPosition.IsOverObject) return;
+            _selectedBaseObject = _playerPosition.BaseObjectAtPosition;
+            _selectedBaseObject.OnSelected();
+            // _isSelectPressed = false;
         }
 
         void ProcessSelectAction()
@@ -113,9 +125,23 @@ namespace ProjectDiorama
                 return;
             }
 
-            if (!_playerPosition.IsOverSelectable) return;
+            if (!_playerPosition.IsOverObject) return;
             _selectedBaseObject = _playerPosition.BaseObjectAtPosition;
             _selectedBaseObject.OnSelected();
+        }
+
+        void ProcessEscapePress()
+        {
+            if (!HasActiveObject) return;
+            _selectedBaseObject.OnDeSelect();
+            _selectedBaseObject = null;
+        }
+        
+        void ProcessDeletePress()
+        {
+            if (!HasActiveObject) return;
+            _selectedBaseObject.OnDelete();
+            _selectedBaseObject = null;
         }
 
         void PlaceObject()

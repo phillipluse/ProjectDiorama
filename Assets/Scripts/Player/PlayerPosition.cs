@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ProjectDiorama
@@ -30,7 +29,14 @@ namespace ProjectDiorama
             GetPlayerPosition();
             
             if (GameWorld.IsObjectBeingPlaced) return;
-            CheckIfOverSelectableObject();
+            if (MousePosition.IsOverUI()) return;
+            if (!IsOverBaseObject(out BaseObject b))
+            {
+                Release();
+                return;
+            }
+            ChangeBaseObject(b);
+            // CheckIfOverBaseObject();
         }
 
         void GetPlayerPosition()
@@ -53,9 +59,9 @@ namespace ProjectDiorama
             }
         }
 
-        void CheckIfOverSelectableObject()
+        void CheckIfOverBaseObject()
         {
-            if (IsOverSelectableObject(out BaseObject b) && !MousePosition.IsOverUI())
+            if (IsOverBaseObject(out BaseObject b) && !MousePosition.IsOverUI())
             {
                 ChangeBaseObject(b);
                 return;
@@ -64,7 +70,7 @@ namespace ProjectDiorama
             Release();
         }
 
-        bool IsOverSelectableObject(out BaseObject baseObject)
+        bool IsOverBaseObject(out BaseObject baseObject)
         {
             if (!MousePosition.IsPositionOverLayerMask(_objectLayerMask, out RaycastHit hit))
             {
@@ -113,6 +119,6 @@ namespace ProjectDiorama
         }
 
         public BaseObject BaseObjectAtPosition { get; private set; }
-        public bool IsOverSelectable => BaseObjectAtPosition != null;
+        public bool IsOverObject => BaseObjectAtPosition != null;
     }
 }

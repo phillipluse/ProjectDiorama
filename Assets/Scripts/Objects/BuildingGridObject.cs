@@ -5,7 +5,7 @@ using MoreMountains.Feedbacks;
 
 namespace ProjectDiorama
 {
-    public class BuildingGridObject : MonoBehaviour, IBaseObjectModule, ISelectable
+    public class BuildingGridObject : MonoBehaviour, IBaseObjectModule, IObjectOnGrid
     {
         [Header("References")]
         [SerializeField] ObjectVisual _visual;
@@ -39,6 +39,14 @@ namespace ProjectDiorama
 
             _visual.Init();
         }
+        
+        public void Tick()
+        {
+            // _visual.OnPlaced();
+            // if (_turnNumber == MAX_NUM_OF_TURNS) return;
+            // _feedbackPlayer.PlayFeedbacks();
+            // _turnNumber++;
+        }
 
         public void OnHoverEnter()
         {
@@ -59,7 +67,6 @@ namespace ProjectDiorama
         public void OnDeSelect()
         {
             MoveVisualObject(NormalOffset);
-            Debug.Log($"{_baseObject.PlacedRotationDirection}");
             _settings.UpdateRotatedSize(_baseObject.PlacedRotationDirection);
             _tempLocalPosition = _settings.ObjectOffset(_baseObject.PlacedRotationDirection);
             if (_isMoveCRRunning)
@@ -88,8 +95,6 @@ namespace ProjectDiorama
             _isMoveCRRunning = false;
         }
 
-        public void OnMove() { }
-
         public void OnRotate(RotationDirection dir)
         {
             _settings.UpdateRotatedSize(dir);
@@ -115,14 +120,6 @@ namespace ProjectDiorama
             _isMoveCRRunning = false;
         }
 
-        public void Tick()
-        {
-            // _visual.OnPlaced();
-            // if (_turnNumber == MAX_NUM_OF_TURNS) return;
-            // _feedbackPlayer.PlayFeedbacks();
-            // _turnNumber++;
-        }
-
         public void OnObjectStateEnter(ObjectState state)
         {
             switch (state)
@@ -145,7 +142,6 @@ namespace ProjectDiorama
 
         public ObjectSettings GetSettings() => _settings;
         public Transform GetTransform() => transform;
-        public BaseObject GetBaseObject() => _baseObject;
         public Vector2 FootprintSize() => _settings.FootprintGridSize;
         Vector3 VerticalOffset => new(0.0f, _moveHeightOffset + _settings.StartObjectSize.y / 2, 0.0f);
         Vector3 NormalOffset => new(0.0f, _settings.StartObjectSize.y / 2, 0.0f);

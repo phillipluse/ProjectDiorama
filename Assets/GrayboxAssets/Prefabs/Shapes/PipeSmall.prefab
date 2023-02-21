@@ -140,8 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connectionPoints:
-  - {fileID: 6202525983843784811}
-  - {fileID: 1397900623946390958}
+  - {fileID: 338527828837977149}
+  - {fileID: 8365248486481070053}
   _renderer: {fileID: 7414840304679590012}
   _nonConnected: {fileID: 2100000, guid: be94e1a85e5037b409b2f1c199f8395e, type: 2}
   _bothConnected: {fileID: 2100000, guid: 374a70770ed118441b6efaad499f6e15, type: 2}
@@ -215,6 +215,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8111616766777422162, guid: 660345604f118a2488ee5a80052eea77,
+        type: 3}
+      propertyPath: _productionLoopComponent
+      value: 
+      objectReference: {fileID: 5334757877687605718}
+    - target: {fileID: 8111616766777422162, guid: 660345604f118a2488ee5a80052eea77,
+        type: 3}
+      propertyPath: connectionPointComponent
+      value: 
+      objectReference: {fileID: 5334757877687605718}
     - target: {fileID: 8708297152475651107, guid: 660345604f118a2488ee5a80052eea77,
         type: 3}
       propertyPath: m_Name
@@ -225,24 +235,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 660345604f118a2488ee5a80052eea77, type: 3}
---- !u!114 &1397900623946390958 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1721292477817023257, guid: 660345604f118a2488ee5a80052eea77,
-    type: 3}
-  m_PrefabInstance: {fileID: 325690005274687159}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34cb4ba4b13406449adafccfb10215f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &3076261369237374535 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3329292892906483952, guid: 660345604f118a2488ee5a80052eea77,
     type: 3}
   m_PrefabInstance: {fileID: 325690005274687159}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8365248486481070053 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8111616766777422162, guid: 660345604f118a2488ee5a80052eea77,
+    type: 3}
+  m_PrefabInstance: {fileID: 325690005274687159}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2b32bf0f87c794988f5d174feea18c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4751454728053224306
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -311,6 +321,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4990621305713639247, guid: b458bad891eb9014ea481ba0f6b971f7,
+        type: 3}
+      propertyPath: _productionLoopComponent
+      value: 
+      objectReference: {fileID: 5334757877687605718}
+    - target: {fileID: 4990621305713639247, guid: b458bad891eb9014ea481ba0f6b971f7,
+        type: 3}
+      propertyPath: connectionPointComponent
+      value: 
+      objectReference: {fileID: 5334757877687605718}
     - target: {fileID: 8708297152475651107, guid: b458bad891eb9014ea481ba0f6b971f7,
         type: 3}
       propertyPath: m_Name
@@ -321,16 +341,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b458bad891eb9014ea481ba0f6b971f7, type: 3}
---- !u!114 &6202525983843784811 stripped
+--- !u!114 &338527828837977149 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1721292477817023257, guid: b458bad891eb9014ea481ba0f6b971f7,
+  m_CorrespondingSourceObject: {fileID: 4990621305713639247, guid: b458bad891eb9014ea481ba0f6b971f7,
     type: 3}
   m_PrefabInstance: {fileID: 4751454728053224306}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34cb4ba4b13406449adafccfb10215f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 061e64d21e5522e49bfa66999ed8f9b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8053712502272951170 stripped

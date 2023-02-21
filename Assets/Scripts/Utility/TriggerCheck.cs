@@ -7,6 +7,7 @@ namespace ProjectDiorama
     {
         public Action<Collider> TriggerEnter;
         public Action<Collider> TriggerExit;
+        public Action<Collider> TriggerStay;
         void OnTriggerEnter(Collider other)
         {
             TriggerEnter?.Invoke(other);
@@ -15,6 +16,11 @@ namespace ProjectDiorama
         void OnTriggerExit(Collider other)
         {
             TriggerExit?.Invoke(other);
+        }
+
+        void OnTriggerStay(Collider other)
+        {
+            TriggerStay?.Invoke(other);
         }
     }
 }

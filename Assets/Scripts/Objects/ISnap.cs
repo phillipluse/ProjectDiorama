@@ -4,7 +4,7 @@ namespace ProjectDiorama
 {
     public interface ISnap
     {
-        public void Snap(Vector3 worldPosition);
+        public void Snap(Transform toTransform, Transform fromTransform, Transform currentTransform);
         public void UnSnap();
     }
 }

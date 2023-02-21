@@ -3,7 +3,12 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
-    public class NonGridObject : MonoBehaviour, IBaseObjectModule, ISelectable, ISnap
+    /// <summary>
+    /// Handles movement and rotations of object component
+    /// Handles object component visual
+    /// Handles state of object component and communicates to Base Object
+    /// </summary>
+    public class FreeMoveComponent : MonoBehaviour, IBaseObjectModule, ISnap
     {
         [Header("References")]
         [SerializeField] GameObject _visualObject;
@@ -15,7 +20,6 @@ namespace ProjectDiorama
         
         BaseObject _baseObject;
         TriggerCheck _triggerCheck;
-        INonGridObjectModule[] _modules;
         Vector3 _startSize;
         Rigidbody _rigidbody;
 
@@ -30,14 +34,11 @@ namespace ProjectDiorama
             AddRigidbody();
             AddTriggerCheck();
 
-            _modules = GetComponentsInChildren<INonGridObjectModule>();
-
-            foreach (INonGridObjectModule nonGridObjectModule in _modules)
-            {
-                nonGridObjectModule.Init(baseObject);
-            }
-
             _visual.Init();
+        }
+        
+        public void Tick()
+        {
         }
 
         public void OnHoverEnter()
@@ -69,21 +70,8 @@ namespace ProjectDiorama
             _visualObject.layer = LayerMask.NameToLayer("PlacedObject");
             RemoveTriggerCheck();
             Destroy(_rigidbody);
-            _visual.OnPlaced();
             if (_baseObject.CurrentState.IsSnapped()) return; 
             MoveVisualObject(NormalOffset);
-        }
-
-        public void OnMove(){}
-
-        public void OnRotate(RotationDirection dir) {}
-
-        public void Tick()
-        {
-            foreach (INonGridObjectModule nonGridObjectModule in _modules)
-            {
-                nonGridObjectModule.Tick();
-            }
         }
 
         public void OnObjectStateEnter(ObjectState state)
@@ -98,17 +86,30 @@ namespace ProjectDiorama
             }
         }
         
+        public void Snap(Transform toTransform, Transform fromTransform, Transform currentTransform)
+        {
+            VisualObjectHeight(toTransform.position.y);
+        }
+
+        public void UnSnap()
+        {
+            MoveVisualObject(MovingOffset);
+        }
+
         void AddTriggerCheck()
         {
             _triggerCheck = _visualObject.AddComponent<TriggerCheck>();
             _triggerCheck.TriggerEnter += OnTriggerEntered;
             _triggerCheck.TriggerExit += OnTriggerExited;
+            _triggerCheck.TriggerStay += OnTriggerStayed;
         }
         
         void RemoveTriggerCheck()
         {
             _triggerCheck.TriggerEnter -= OnTriggerEntered;
             _triggerCheck.TriggerExit -= OnTriggerExited;
+            _triggerCheck.TriggerStay -= OnTriggerStayed;
+
             Destroy(_triggerCheck);
         }
         
@@ -119,6 +120,13 @@ namespace ProjectDiorama
         }
 
         void OnTriggerEntered(Collider other)
+        {
+            if (_triggerExclusionLayers.Contains(other.gameObject.layer)) return;
+            if (_baseObject.CurrentState.IsSnapped()) return;
+            _baseObject.SetState(ObjectState.Warning);
+        }
+
+        void OnTriggerStayed(Collider other)
         {
             if (_triggerExclusionLayers.Contains(other.gameObject.layer)) return;
             if (_baseObject.CurrentState.IsSnapped()) return;
@@ -142,26 +150,7 @@ namespace ProjectDiorama
             _visualObject.transform.localPosition = newHeight;
         }
 
-        public BaseObject GetBaseObject() => _baseObject;
-
-        public ObjectSettings GetSettings()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Transform GetTransform() => transform;
-
-        public Vector2 FootprintSize(){return Vector2.zero;}
         Vector3 MovingOffset => new(0.0f, _moveHeightOffset + _startSize.y / 2, 0.0f);
         Vector3 NormalOffset => new(0.0f, _startSize.y / 2, 0.0f);
-        public void Snap(Vector3 worldPosition)
-        {
-            VisualObjectHeight(worldPosition.y);
-        }
-
-        public void UnSnap()
-        {
-            MoveVisualObject(MovingOffset);
-        }
     }
 }

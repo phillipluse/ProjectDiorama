@@ -16,22 +16,22 @@ PrefabInstance:
     - target: {fileID: 3085047139417115424, guid: e3e5228fd46b8e34785d3f2dfc925308,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: e3e5228fd46b8e34785d3f2dfc925308,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.4915085
+      value: 5.1633797
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: e3e5228fd46b8e34785d3f2dfc925308,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.00000023841858
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: e3e5228fd46b8e34785d3f2dfc925308,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2559795
+      value: 3.451076
       objectReference: {fileID: 0}
     - target: {fileID: 3085047139417115424, guid: e3e5228fd46b8e34785d3f2dfc925308,
         type: 3}
@@ -171,6 +171,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PipeSmall
+      objectReference: {fileID: 0}
+    - target: {fileID: 8053712502272951170, guid: 44514a9bab6a2604ebacd91b1645eb74,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8053712502272951170, guid: 44514a9bab6a2604ebacd91b1645eb74,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8053712502272951170, guid: 44514a9bab6a2604ebacd91b1645eb74,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

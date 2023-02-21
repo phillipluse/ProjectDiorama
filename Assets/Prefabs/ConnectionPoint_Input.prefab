@@ -74,8 +74,49 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConnectionPoint_Input
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3448469592777310898, guid: 896ca4ec68a53fc4db3fa57b4d030706, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4675361684434777480, guid: 896ca4ec68a53fc4db3fa57b4d030706,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4990621305713639247}
   m_SourcePrefab: {fileID: 100100000, guid: 896ca4ec68a53fc4db3fa57b4d030706, type: 3}
+--- !u!114 &4421377337559158133 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 388380433118831838, guid: 896ca4ec68a53fc4db3fa57b4d030706,
+    type: 3}
+  m_PrefabInstance: {fileID: 4051039204425050539}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708297152475651107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1769d5dd3597bb942b0eebb8f5b0f38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &8708297152475651107 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4675361684434777480, guid: 896ca4ec68a53fc4db3fa57b4d030706,
+    type: 3}
+  m_PrefabInstance: {fileID: 4051039204425050539}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4990621305713639247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708297152475651107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061e64d21e5522e49bfa66999ed8f9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _triggerCheck: {fileID: 4421377337559158133}
+  _productionLoopComponent: {fileID: 0}
+  _connectionType: {fileID: 11400000, guid: bb3396a0e2513fd4b98a55f8a0de15ef, type: 2}
+  _connectionPointLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048

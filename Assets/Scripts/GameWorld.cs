@@ -10,7 +10,6 @@ namespace ProjectDiorama
         static Player Player;
 
         [SerializeField] Player _player;
-        
 
         void Awake()
         {

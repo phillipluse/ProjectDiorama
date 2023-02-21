@@ -11,7 +11,7 @@ namespace ProjectDiorama
 
         public void Init(BaseObject baseObject)
         {
-            ChangeSize(baseObject.Selectable.FootprintSize());
+            ChangeSize(baseObject.ObjectOnGrid.FootprintSize());
         }
 
         public void Show()

@@ -27,13 +27,13 @@ namespace ProjectDiorama
 
         void Init(BaseObject baseObject)
         {
-            if (baseObject is not BaseObjectGrid) return;
+            if (baseObject is not GridMoveBaseObject) return;
             var t = transform;
-            var selectableT = baseObject.Selectable.GetTransform();
+            var selectableT = baseObject.ObjectOnGrid.GetTransform();
 
             t.parent = selectableT;
 
-            var footPrintSize = baseObject.Selectable.FootprintSize();
+            var footPrintSize = baseObject.ObjectOnGrid.FootprintSize();
             var yPos = 0.0f;
             var pos = new Vector3(-footPrintSize.x / 2, yPos, -footPrintSize.y / 2);
             Quaternion rot = new Quaternion().Zero();

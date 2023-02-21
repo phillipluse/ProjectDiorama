@@ -4,10 +4,16 @@ using UnityEngine;
 
 namespace ProjectDiorama
 {
+    /// <summary>
+    /// Handles movement and rotation of Object
+    /// Handles state of Object
+    /// Alerts components of actions (OnSelected, Hover Actions, etc)
+    /// </summary>
+    [SelectionBase]
     public abstract class BaseObject : MonoBehaviour
     {
         public Action<ObjectState> StateChange;
-        public ISelectable Selectable { get; private set; }
+        public IObjectOnGrid ObjectOnGrid { get; private set; }
         public RotationDirection PlacedRotationDirection { get; private set; }
         public ObjectState CurrentState = ObjectState.None;
         
@@ -19,7 +25,7 @@ namespace ProjectDiorama
         bool _isRotateCRRunning;
         bool _isInitialized;
         bool _isSelected;
-       
+
         public virtual void Init(Vector3 position)
         {
             if (_isInitialized) return;
@@ -30,7 +36,7 @@ namespace ProjectDiorama
                 baseObjectModule.Init(this);
             }
 
-            Selectable = GetSelectable();
+            ObjectOnGrid = GetObjectOnGrid();
             
             _isInitialized = true;
             Events.AnyObjectInitialized(this);
@@ -105,13 +111,8 @@ namespace ProjectDiorama
         public virtual bool TryToPlaceObject()
         {
             if (CurrentState.IsWarning()) return false;
-
-            if (_isRotateCRRunning)
-            {
-                RotateTo(_targetRotation);
-                StopCoroutine(_rotateCO);
-                _isRotateCRRunning = false;
-            }
+            StopRotation();
+            RotateToTarget();
             
             foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
@@ -122,7 +123,7 @@ namespace ProjectDiorama
             return true;
         }
 
-        public abstract void Move(Vector3 position);
+        protected abstract void Move(Vector3 position);
 
         public void Rotate()
         {
@@ -137,7 +138,8 @@ namespace ProjectDiorama
 
             foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
-                baseObjectModule.OnRotate(_tempRotationDirection);
+                if (baseObjectModule is not IObjectOnGrid o) continue;
+                o.OnRotate(_tempRotationDirection);
             }
         }
 
@@ -160,13 +162,8 @@ namespace ProjectDiorama
 
         protected virtual void MoveBackToStartPositionAndRotation()
         {
-            if (_isRotateCRRunning)
-            {
-                StopCoroutine(_rotateCO);
-                _isRotateCRRunning = false;
-            }
-            
-            RotateTo(_targetRotation);
+            StopRotation();
+            RotateToTarget();
         }
 
         protected void MoveTo(Vector3 position)
@@ -175,16 +172,28 @@ namespace ProjectDiorama
             transform.position = position;
         }
 
+        protected void StopRotation()
+        {
+            if (!_isRotateCRRunning) return;
+            StopCoroutine(_rotateCO);
+            _isRotateCRRunning = false;
+        }
+
+        protected void RotateToTarget()
+        {
+            transform.rotation = _targetRotation;
+        }
+
         void RotateTo(Quaternion rotation)
         {
             transform.rotation = rotation;
         }
 
-        ISelectable GetSelectable()
+        IObjectOnGrid GetObjectOnGrid()
         {
             foreach (IBaseObjectModule baseObjectModule in ObjectModules)
             {
-                if (baseObjectModule is not ISelectable selectable) continue;
+                if (baseObjectModule is not IObjectOnGrid selectable) continue;
                 return selectable;
             }
 
@@ -214,5 +223,7 @@ namespace ProjectDiorama
                 baseObjectModule.Tick();
             }
         }
+
+        public bool IsRotating => _isRotateCRRunning;
     }
 }
